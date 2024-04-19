@@ -1,9 +1,9 @@
-import HelloScreen from "@/components/GreetScreen/greet";
+import HomePage from "@/components/GreetScreen/screen";
 
 export default function Home() {
 	return (
-		<div className="max-h-screen max-w-screen bg-white">
-			<HelloScreen />
+		<div className="min-h-screen bg-white">
+			<HomePage />
 		</div>
 	);
 }
