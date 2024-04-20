@@ -22,10 +22,10 @@ export default function Greeter() {
             </a>
           </div>
           <div className="lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900 mr-8 hover:text-gray-700">
-              Sign in
+            <a href="/signup" className="text-sm font-semibold leading-6 text-gray-900 mr-8 hover:text-gray-700">
+              Sign up
             </a>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
+            <a href="/login" className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
               Log in <span>&rarr;</span>
             </a>
           </div>
