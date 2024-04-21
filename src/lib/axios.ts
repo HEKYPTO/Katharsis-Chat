@@ -4,7 +4,7 @@ const axios = Axios.create({
     baseURL : "https://chat-server-99-4dddce891e1d.herokuapp.com/"
 });
 
-async function userSignup(userName: string, userPassword: string) {
+export async function userSignup(userName: string, userPassword: string) {
     try {
         const response = await axios.post(`/signup`, {
             username: userName,
@@ -34,7 +34,7 @@ async function userSignup(userName: string, userPassword: string) {
     }
 }
 
-async function userLogin(userName: string, userPassword: string) {
+export async function userLogin(userName: string, userPassword: string) {
     try {
         const response = await axios.post(`/login`, {
             username: userName,
@@ -64,7 +64,7 @@ async function userLogin(userName: string, userPassword: string) {
     }
 }
 
-async function userLogout() {
+export async function userLogout() {
     try {
         const response = await axios.post('/login', {}, {
             headers: {
@@ -87,7 +87,7 @@ async function userLogout() {
     }
 }
 
-async function createRoom(roomname: string, roomtype: string, member: string) {
+export async function createRoom(roomname: string, roomtype: string, member: string) {
     try {
         const response = await axios.post(`/create-room`, {
             room_name : roomname,
@@ -113,7 +113,7 @@ async function createRoom(roomname: string, roomtype: string, member: string) {
     }
 }
 
-async function getRoomInformation(roomId: string) {
+export async function getRoomInformation(roomId: string) {
     try {
         const response = await axios.get(`/rooms/${roomId}`, {
             headers: {
@@ -131,3 +131,4 @@ async function getRoomInformation(roomId: string) {
         throw error;
     }
 }
+
