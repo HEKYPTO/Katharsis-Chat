@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import UserIcon from '../Misc/UserIcon'
 
 
 const team = [
@@ -74,7 +75,7 @@ export default function MemberList({ open: initialOpen = true }) {
                               <div className="absolute inset-0 group-hover:bg-gray-50" aria-hidden="true" />
                               <div className="relative flex min-w-0 flex-1 items-center">
                                 <span className="relative inline-block flex-shrink-0">
-                                  <img className="h-10 w-10 rounded-full" src={person.imageUrl} alt="" />
+                                  <UserIcon name={person.name}/>
                                   <span
                                     className={classNames(
                                       person.status === 'online' ? 'bg-green-400' : 'bg-gray-300',
