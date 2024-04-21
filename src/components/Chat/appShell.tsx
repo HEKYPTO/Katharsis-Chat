@@ -4,11 +4,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
-  BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
   UsersIcon,
@@ -22,7 +18,7 @@ import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 
 const navigation = [
-  { name: 'Message', href: '#', icon: HomeIcon, current: true },
+  { name: 'Message', href: '#', icon: HomeIcon, current: false },
   { name: 'Chat', href: '#', icon: UsersIcon, current: false },
   { name: 'Global', href: '#', icon: FolderIcon, current: false },
 ]
@@ -52,6 +48,16 @@ function classNames(...classes: string[]) {
 export default function ChatPane() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [memberOpen, setMemberOpen] = useState(false)
+  const [selectedNavItem, setSelectedNavItem] = useState(null)
+  const [selectedTeam, setSelectedTeam] = useState(null)
+
+  const handleNavigationSelect = (item: any) => {
+    setSelectedNavItem(item)
+  }
+
+  const handleTeamSelect = (team: any) => {
+    setSelectedTeam(team)
+  }
 
   return (
     <>
@@ -116,16 +122,15 @@ export default function ChatPane() {
                               <li key={item.name}>
                                 <a
                                   href={item.href}
+                                  onClick={() => handleNavigationSelect(item)}
                                   className={classNames(
-                                    item.current
-                                      ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                    selectedNavItem === item ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                                      selectedNavItem === item ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
                                       'h-6 w-6 shrink-0'
                                     )}
                                     aria-hidden="true"
@@ -154,9 +159,10 @@ export default function ChatPane() {
                             {teams.map((team) => (
                               <li key={team.name}>
                                 <a
+                                  onClick={() => handleTeamSelect(team)}
                                   href={team.href}
                                   className={classNames(
-                                    team.current
+                                    selectedTeam === team
                                       ? 'bg-gray-50 text-indigo-600'
                                       : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -164,7 +170,7 @@ export default function ChatPane() {
                                 >
                                   <span
                                     className={classNames(
-                                      team.current
+                                      selectedTeam === team
                                         ? 'text-indigo-600 border-indigo-600'
                                         : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                       'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
@@ -208,20 +214,19 @@ export default function ChatPane() {
                       <li key={item.name}>
                         <a
                           href={item.href}
+                          onClick={() => handleNavigationSelect(item)}
                           className={classNames(
-                            item.current
-                              ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                            selectedNavItem === item ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
                         >
-                          <item.icon
-                            className={classNames(
-                              item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
-                              'h-6 w-6 shrink-0'
-                            )}
-                            aria-hidden="true"
-                          />
+                        <item.icon
+                          className={classNames(
+                            selectedNavItem === item ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                            'h-6 w-6 shrink-0'
+                          )}
+                          aria-hidden="true"
+                        />
                           {item.name}
                         </a>
                       </li>
@@ -247,8 +252,9 @@ export default function ChatPane() {
                       <li key={team.name}>
                         <a
                           href={team.href}
+                          onClick={() => handleTeamSelect(team)}
                           className={classNames(
-                            team.current
+                            selectedTeam === team
                               ? 'bg-gray-50 text-indigo-600'
                               : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -256,7 +262,7 @@ export default function ChatPane() {
                         >
                           <span
                             className={classNames(
-                              team.current
+                              selectedTeam === team
                                 ? 'text-indigo-600 border-indigo-600'
                                 : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                               'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
@@ -287,7 +293,7 @@ export default function ChatPane() {
 
             <div className="flex justify-start items-center">
               <button
-                className="block text-sm text-gray-200 bg-indigo-600 hover:bg-indigo-700 rounded mr-2"
+                className="block text-sm text-gray-200 bg-indigo-600 hover:bg-indigo-700 rounded-sm mr-2"
                 onClick={() => setMemberOpen(!memberOpen)}
               >
                 <UserCircleIcon className="h-6 w-6" />
