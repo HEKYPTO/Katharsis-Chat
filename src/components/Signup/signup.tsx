@@ -1,7 +1,78 @@
+"use client"
+
 import Image from "next/image"
-import Link from "next/link"
+import { ChangeEvent, useState } from "react"
+import { userSignup } from "@/lib/axios";
 
 export default function SignuoForm() {
+
+  const [submitTimes, setSubmitTimes] = useState(0);
+  const [errCode, setErrCode] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    c_password: ""
+  });
+
+  const usernameRegex: RegExp = /^(?=.{8,20}$)[a-zA-Z0-9._-]+$/;
+  const passwordRegex: RegExp = /^(?=.{8,20}$)[a-zA-Z0-9!@#$%^&*_-]+$/;
+
+  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(submitTimes);
+    setErrCode(null);
+    switch(submitTimes) {
+      case 0:
+        handleDefualtCase();
+        break;
+      case 1:
+        handleCheckedCase();
+        break;
+    }
+  }
+
+  const handleDefualtCase = () => {
+    if (!usernameRegex.test(formData.username)) {
+      setErrCode("IllgalUsername");
+      return;
+    }
+    if (!passwordRegex.test(formData.password)) {
+      setErrCode("IllegalPassword")
+      return;
+    }
+
+    setSubmitTimes(1);
+  }
+
+  const handleCheckedCase = () => {
+    if (formData.password !== formData.c_password) {
+      setErrCode("PasswordMismatch");
+      return;
+    }
+
+    handleCreateAccount();
+  }
+
+  const handleCreateAccount = async () => {
+    try {
+      const { username, password } = formData;
+      const response = await userSignup(username, password);
+
+      console.log("Signup successful:", response);
+      
+    } catch (error) {
+      console.error("Error during Signup:", error);
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+  
     return (
       <>
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -13,7 +84,6 @@ export default function SignuoForm() {
                     width={10}
                     height={10}
                 />
-
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign up to create your account
             </h2>
@@ -27,15 +97,22 @@ export default function SignuoForm() {
                 </label>
                 <div className="mt-2">
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
+                    id="username"
+                    name="username"
+                    type="text"
                     autoComplete="email"
                     required
+                    value={formData.username}
+                    onChange={handleChange}
                     className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
+
+
+              {errCode === "IllgalUsername" && (
+                <p className="text-sm leading-6 text-red-400">* Username must be between 8 and 20 characters.</p>
+              )}
   
               <div>
                 <div className="flex items-center justify-between">
@@ -48,16 +125,48 @@ export default function SignuoForm() {
                     id="password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     required
+                    value={formData.password}
+                    onChange={handleChange}
                     className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
-  
+
+              {errCode === "IllegalPassword" && (
+                <p className="text-sm leading-6 text-red-400">* Password must be between 8 and 20 characters and can contain letters, numbers, and special characters.</p>
+              )}
+
+              {submitTimes > 0 && ( 
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="c_password" className="block text-sm font-medium leading-6 text-gray-900">
+                      Confirm Password
+                    </label>
+                  </div>
+                  <div className="mt-2">
+                    <input
+                      id="c_password"
+                      name="c_password"
+                      type="password"
+                      autoComplete="new-password"
+                      required={submitTimes > 0} 
+                      value={formData.c_password}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {errCode === "PasswordMismatch" && (
+                <p className="text-sm leading-6 text-red-400">* Both Passwords do not match.</p>
+              )}
+
               <div>
                 <button
-                  type="submit"
+                  onClick={(event) => submitHandler(event)}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Sign up
