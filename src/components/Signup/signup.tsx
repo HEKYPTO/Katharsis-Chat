@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { ChangeEvent, useState } from "react"
-import { userSignup } from "@/lib/axios";
+import { isLoggedIn, userSignup } from "@/lib/axios";
 
 export default function SignuoForm() {
 
@@ -32,11 +32,11 @@ export default function SignuoForm() {
   }
 
   const handleDefualtCase = () => {
-    if (!usernameRegex.test(formData.username)) {
+    if (!usernameRegex.test(formData.username.toString())) {
       setErrCode("IllgalUsername");
       return;
     }
-    if (!passwordRegex.test(formData.password)) {
+    if (!passwordRegex.test(formData.password.toString())) {
       setErrCode("IllegalPassword")
       return;
     }
@@ -92,7 +92,7 @@ export default function SignuoForm() {
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" action="#" method="POST">
               <div>
-                <label className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                   Username
                 </label>
                 <div className="mt-2">
