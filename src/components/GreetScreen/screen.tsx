@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import Footer from "./footer";
 import Greeter from "./greet";
 import Start from "./start";
@@ -6,10 +7,11 @@ import Team from "./team";
 import Trusted from "./trust";
 
 export default function HomePage() {
+
     return (
         <div>
-            <Greeter />
-            <Stats />
+            <Greeter/>
+            <Stats/>
             <Trusted />
             <Team />
             <Start />

@@ -92,7 +92,7 @@ export default function SignuoForm() {
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" action="#" method="POST">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
                   Username
                 </label>
                 <div className="mt-2">
@@ -100,7 +100,7 @@ export default function SignuoForm() {
                     id="username"
                     name="username"
                     type="text"
-                    autoComplete="email"
+                    autoComplete="username"
                     required
                     value={formData.username}
                     onChange={handleChange}
