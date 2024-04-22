@@ -235,7 +235,10 @@ export async function Removemember(roomId: string, Username: string) {
 }
 
 export function isLoggedIn() {
-    const token = localStorage.getItem('token');
-    return token !== null && token !== '';
+    if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        return token !== null && token !== '';
+    }
+    return false;
 }
 
