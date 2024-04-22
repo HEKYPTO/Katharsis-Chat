@@ -2,10 +2,12 @@
 
 import Image from "next/image"
 import { ChangeEvent, useState } from "react"
-import { isLoggedIn, userSignup } from "@/lib/axios";
+import { userSignup } from "@/lib/axios";
+import { useRouter } from 'next/navigation';
 
 export default function SignuoForm() {
 
+  const router = useRouter();
   const [submitTimes, setSubmitTimes] = useState(0);
   const [errCode, setErrCode] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -59,6 +61,8 @@ export default function SignuoForm() {
       const response = await userSignup(username, password);
 
       console.log("Signup successful:", response);
+
+      router.push('/chat');
       
     } catch (error) {
       console.error("Error during Signup:", error);

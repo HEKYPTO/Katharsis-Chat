@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { userLogin } from "@/lib/axios";
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -34,11 +36,13 @@ export default function LoginForm() {
 
       console.log("Login successful", userData);
 
+      router.push('/chat');
+
     } catch (error) {
       setError("* Invalid username or password.");
       console.error("Error during login:", error);
     }
-  }
+  };
 
   return (
     <>
