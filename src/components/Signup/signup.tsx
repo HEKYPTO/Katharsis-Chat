@@ -17,7 +17,7 @@ export default function SignuoForm() {
   const usernameRegex: RegExp = /^(?=.{8,20}$)[a-zA-Z0-9._-]+$/;
   const passwordRegex: RegExp = /^(?=.{8,20}$)[a-zA-Z0-9!@#$%^&*_-]+$/;
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = (event: any) => {
     event.preventDefault();
     console.log(submitTimes);
     setErrCode(null);
@@ -174,7 +174,7 @@ export default function SignuoForm() {
               </div>
             </form>
             <div className="mt-4 text-center text-sm text-gray-600">
-              Don't have an account?{" "}
+              Already have an account?{" "}
                 <a href="/login" className="text-indigo-600 hover:underline font-semibold">Login here</a>
             </div>
           </div>
