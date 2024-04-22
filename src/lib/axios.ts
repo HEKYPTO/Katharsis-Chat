@@ -69,6 +69,7 @@ export async function userLogout() {
         const response = await axios.post('/login', {}, {
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         });
 
@@ -82,7 +83,7 @@ export async function userLogout() {
 
         return response.data;
     } catch (error) {
-        console.error("Error during Signup:", error);
+        console.error("Error during Logout:", error);
         throw error;
     }
 }
