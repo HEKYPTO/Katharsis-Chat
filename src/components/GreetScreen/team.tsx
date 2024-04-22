@@ -1,13 +1,36 @@
-const people = [
-    {
-      name: 'Leonard Krasner',
-      role: 'Senior Designer',
-      imageUrl:
-        'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-      bio: 'Quia illum aut in beatae. Possimus dolores aliquid accusantium aut in ut non assumenda. Enim iusto molestias aut deleniti eos aliquid magnam molestiae. At et non possimus ab. Magni labore molestiae nulla qui.',
-    },
+import Image from "next/image"
+import Link from "next/link";
 
-  ]
+const people = [
+  {
+    name: 'HEKYPTO',
+    role: 'Web-Interface Designer',
+    imageUrl: 'https://avatars.githubusercontent.com/u/105188275?v=4',
+    bio: 'Crafting captivating digital experiences with innovative design and seamless functionality.',
+    link: "https://github.com/HEKYPTO"
+  },
+  {
+    name: 'Chomchaby',
+    role: 'Socket-DB Designer',
+    imageUrl: 'https://avatars.githubusercontent.com/u/87964352?v=4',
+    bio: 'Excels in backend architecture, shaping robust systems for seamless data exchange.',
+    link: "https://github.com/chomchaby"
+  },
+  {
+    name: 'JdomenusRex',
+    role: 'API Master',
+    imageUrl: 'https://avatars.githubusercontent.com/u/97604415?v=4',
+    bio: 'Revolutionizing integration with visionary API architectures and expertise in AXIOS principles.',
+    link: "https://github.com/Jdomenusrex"
+  },
+  {
+    name: 'Nathathaii',
+    role: 'DB-Infra Engineer',
+    imageUrl: 'https://avatars.githubusercontent.com/u/111551122?v=4',
+    bio: 'Ensuring the smooth operation of critical data systems with meticulous database management.',
+    link: "https://github.com/Nathathaii"
+  }
+];
   
   export default function Team() {
     return (
@@ -16,7 +39,7 @@ const people = [
           <div className="mx-auto max-w-2xl sm:text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Meet our leadership</h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              We’re a dynamic group of individuals who are passionate about what we do and dedicated to delivering the
+              We are a dynamic group of individuals who are passionate about what we do and dedicated to delivering the
               best results for our clients.
             </p>
           </div>
@@ -26,7 +49,9 @@ const people = [
           >
             {people.map((person) => (
               <li key={person.name} className="flex flex-col gap-6 xl:flex-row">
-                <img className="aspect-[4/5] w-52 flex-none rounded-2xl object-cover" src={person.imageUrl} alt="" />
+                <Link href={person.link}>
+                  <Image className="flex-none rounded-full object-cover" src={person.imageUrl} alt={person.name} width={220} height={220} loading="lazy"/>
+                </Link>
                 <div className="flex-auto">
                   <h3 className="text-lg font-semibold leading-8 tracking-tight text-gray-900">{person.name}</h3>
                   <p className="text-base leading-7 text-gray-600">{person.role}</p>
