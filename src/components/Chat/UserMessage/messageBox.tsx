@@ -14,7 +14,7 @@ export default function MessageBox(props: MessageBoxProps) {
 
     return (
         <div>
-            <div className="flex mb-4">
+            <div className="flex mb-2">
                 <span className="flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border font-medium bg-white text-gray-400 border-gray-200">
                     {initials}
                 </span>
@@ -26,7 +26,6 @@ export default function MessageBox(props: MessageBoxProps) {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }

@@ -48,7 +48,7 @@ export default function MessagePane() {
         {isLoading ? (
             <div>Loading...</div>
         ) : (
-            <>
+            <div className="mt-2">
             <MessageBox
                 username="John Doe"
                 datetime="2024-04-21T12:00:00"
@@ -59,7 +59,7 @@ export default function MessagePane() {
                 datetime="2024-04-21T12:00:00"
                 message={messageLong}
             />
-            </>
+            </div>
         )}
         </div>
     );
