@@ -40,10 +40,6 @@ const teams = [
   { id: 12, name: 'Workcation', href: '#', initial: 'W', current: false },
 ]
 
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -91,6 +87,15 @@ export default function ChatPane() {
     }
   };
 
+  const handleViewProfile = async () => {
+
+  };
+
+  const userNavigation = [
+    { name: 'Your profile', event: handleViewProfile },
+    { name: 'Sign out', event: handleSignout },
+  ]
+
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -115,6 +120,9 @@ export default function ChatPane() {
 
   console.log(login)
   console.log(localStorage)
+
+
+  
 
   return (
     <>
@@ -387,16 +395,15 @@ export default function ChatPane() {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
-                              href={item.href}
-                              onClick={item.name === 'Sign out' ? handleSignout(): undefined}
+                            <button
+                              onClick={item.event}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
-                                'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                'block w-full px-3 py-1 text-sm leading-6 text-gray-900'
                               )}
                             >
                               {item.name}
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       ))}
