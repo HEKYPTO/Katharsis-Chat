@@ -16,6 +16,7 @@ import Image from 'next/image'
 import MemberList from './memberBar'
 import MessageInput from './messageInput'
 import MessagePane from './messagePane'
+import NewChatPage from './NewChatPage/createNewChat'
 
 const navigation = [
   { name: 'Message', href: '#', icon: HomeIcon, current: false },
@@ -50,13 +51,20 @@ export default function ChatPane() {
   const [memberOpen, setMemberOpen] = useState(false)
   const [selectedNavItem, setSelectedNavItem] = useState(null)
   const [selectedTeam, setSelectedTeam] = useState(null)
+  const [newChatOpen, setNewChatOpen] = useState(false)
 
   const handleNavigationSelect = (item: any) => {
     setSelectedNavItem(item)
+    setNewChatOpen(false)
   }
 
   const handleTeamSelect = (team: any) => {
     setSelectedTeam(team)
+  }
+
+  const handleNewChatOpen = () => {
+    setSelectedNavItem(null)
+    setNewChatOpen(true)
   }
 
   return (
@@ -144,6 +152,7 @@ export default function ChatPane() {
                         <li className="">
                           <a
                             href="#"
+                            onClick={() => handleNewChatOpen()}
                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-white hover:bg-indigo-700 bg-indigo-600"
                           >
                             <Cog6ToothIcon
@@ -236,6 +245,7 @@ export default function ChatPane() {
                 <li className="">
                   <a
                     href="#"
+                    onClick={() => handleNewChatOpen()}
                     className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-white hover:bg-indigo-700 bg-indigo-600"
                   >
                     <Cog6ToothIcon
@@ -292,12 +302,12 @@ export default function ChatPane() {
             <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
 
             <div className="flex justify-start items-center">
-              <button
-                className="block text-sm text-gray-200 bg-indigo-600 hover:bg-indigo-700 rounded-sm mr-2"
-                onClick={() => setMemberOpen(!memberOpen)}
-              >
-                <UserCircleIcon className="h-6 w-6" />
-              </button>
+            <button
+              className="block text-sm text-gray-700 rounded-full mr-1 hover:bg-gray-200 py-1 px-1"
+              onClick={() => setMemberOpen(!memberOpen)}
+            >
+              <UserCircleIcon className="h-6 w-6 text-gray-700" />
+            </button>
               <span>Chat Name</span>
             </div>
 
@@ -348,11 +358,12 @@ export default function ChatPane() {
           </div>
 
           <main className="">
-            <div className="px-4 sm:px-6 lg:px-8 bg-white">
+            <div className="bg-white">
 
               <MemberList open={memberOpen} />
               <MessagePane/>
-              <MessageInput />
+              {/* <MessageInput /> */}
+              {/* <NewChatPage /> */}
             </div>
           </main>
         </div>

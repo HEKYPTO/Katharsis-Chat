@@ -14,18 +14,19 @@ export default function MessageBox(props: MessageBoxProps) {
 
     return (
         <div>
-            <div className="flex">
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg border font-medium bg-white text-gray-400 border-gray-200">
+            <div className="flex mb-4">
+                <span className="flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border font-medium bg-white text-gray-400 border-gray-200">
                     {initials}
                 </span>
-                <div className="ml-3">
-                    <span className="font-bold mx-2">{name}</span>
+                <div className="ml-2">
+                    <span className="font-bold mr-2">{name}</span>
                     <span>{time}</span>
+                    <div className="mt-1 px-4 py-2 bg-gray-100 rounded-lg mr-4">
+                        <pre className="whitespace-pre-wrap">{message}</pre>
+                    </div>
                 </div>
             </div>
-            <div className="mt-2 px-4 py-2 bg-gray-100 rounded-lg">
-                <pre className="whitespace-pre-wrap">{message}</pre>
-            </div>
+
         </div>
     );
 }

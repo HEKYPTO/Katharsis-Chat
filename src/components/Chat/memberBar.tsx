@@ -2,7 +2,7 @@
 
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, UserPlusIcon } from '@heroicons/react/24/outline'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import UserIcon from '../Misc/UserIcon'
 
@@ -64,8 +64,20 @@ export default function MemberList({ open: initialOpen = true }) {
                               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                             </button>
                             </div>
-
                       </div>
+                    </div>
+                    <div className="flex items-center ml-5">
+                      <label className="sr-only">Message</label>
+                      <input
+                        type="user"
+                        name="username"
+                        id="username"
+                        className="flex-1 block rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
+                        placeholder="Find or Add Member"
+                      />
+                      <button type="button" className="ml-2 mr-5 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white p-2">
+                        <UserPlusIcon className="h-5 w-5" />
+                      </button>
                     </div>
                     <ul role="list" className="flex-1 divide-y divide-gray-200 overflow-y-auto">
                       {team.map((person) => (
@@ -86,7 +98,7 @@ export default function MemberList({ open: initialOpen = true }) {
                                 </span>
                                 <div className="ml-4 truncate">
                                   <p className="truncate text-sm font-medium text-gray-900">{person.name}</p>
-                                  <p className="truncate text-sm text-gray-500">{'@' + person.handle}</p>
+      
                                 </div>
                               </div>
                             </a>
