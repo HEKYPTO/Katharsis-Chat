@@ -27,8 +27,6 @@ export default function MessagePane() {
   const msgRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const message = `...`;
-
     useEffect(() => {
         const delay = setTimeout(() => {
         setIsLoading(false);
@@ -46,7 +44,7 @@ export default function MessagePane() {
     return (
         <div className="max-h-[calc(100vh-10rem)] overflow-y-auto ml-2" ref={msgRef}>
         {isLoading ? (
-            <div>Loading...</div>
+            <div></div>
         ) : (
             <div className="mt-2">
             <MessageBox

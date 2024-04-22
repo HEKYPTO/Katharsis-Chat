@@ -90,11 +90,11 @@ export default function NewChatPage() {
                     <UserPlusIcon className="h-5 w-5" />
                   </button>
                 </div>
-                <p className="mt-3 text-sm leading-6 text-red-400">* The previous user could not be found.</p>
-                <p className="mt-3 text-sm leading-6 text-red-400">* This user is previously added.</p>
+                <p className="mt-2 text-sm leading-6 text-red-400">* The previous user could not be found.</p>
+                <p className="mt-2 text-sm leading-6 text-red-400">* This user is previously added.</p>
               </div>
               
-              <div className="mt-1 px-4 py-2 bg-gray-100 rounded-lg mr-4 min-h-200 flex-shrink-0 w-[24rem] overflow-x-auto">
+              <div className="mt-4 px-4 py-2 bg-gray-100 rounded-lg mr-4 min-h-200 min-w-[16rem] max-w-[28rem] overflow-x-auto">
                 <pre className="whitespace-pre-wrap">
                   <ul role="list" className="flex-1 divide-y divide-gray-200">
                     {team.map((person) => (
@@ -115,8 +115,8 @@ export default function NewChatPage() {
                                 aria-hidden="true"
                               />
                             </span>
-                            <div className="ml-4 overflow-x-hidden"> 
-                              <p className="text-sm text-gray-900 overflow-x-auto">
+                            <div className="ml-4"> 
+                              <p className="text-sm text-gray-900">
                                 {person.name}
                               </p>
                             </div>

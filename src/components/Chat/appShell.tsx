@@ -304,7 +304,7 @@ export default function ChatPane() {
             <div className="flex justify-start items-center">
             <button
               className="block text-sm text-gray-700 rounded-full mr-1 hover:bg-gray-200 py-1 px-1"
-              onClick={() => setMemberOpen(!memberOpen)}
+              onClick={() => setMemberOpen(true)}
             >
               <UserCircleIcon className="h-6 w-6 text-gray-700" />
             </button>
@@ -359,11 +359,15 @@ export default function ChatPane() {
 
           <main className="">
             <div className="bg-white">
-
-              <MemberList open={memberOpen} />
-              <MessagePane/>
-              {/* <MessageInput /> */}
-              {/* <NewChatPage /> */}
+              {newChatOpen ? (
+                <NewChatPage />
+              ) : (
+                <div>
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} />
+                  <MessageInput /> 
+                  <MessagePane />
+                </div>
+              )}
             </div>
           </main>
         </div>

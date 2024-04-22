@@ -6,6 +6,10 @@ import { XMarkIcon, UserPlusIcon } from '@heroicons/react/24/outline'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import UserIcon from '../Misc/UserIcon'
 
+interface MemberProps {
+  isOpen: boolean;
+  closeMember: () => void;
+}
 
 const team = [
   {
@@ -23,16 +27,21 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function MemberList({ open: initialOpen = true }) {
-  const [open, setOpen] = useState(!!initialOpen);
+export default function MemberList({ isOpen, closeMember }: MemberProps) {
+  const [open, setOpen] = useState(isOpen);
 
   useEffect(() => {
-    setOpen(!!initialOpen);
-  }, [initialOpen]);
+    setOpen(isOpen);
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setOpen(false);
+    closeMember(); 
+  };
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={handleClose}>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -57,7 +66,7 @@ export default function MemberList({ open: initialOpen = true }) {
                               <button
                               type="button"
                               className="relative rounded-md bg-white text-gray-400 hover:text-gray-500"
-                              onClick={() => setOpen(false)}
+                              onClick={() => handleClose}
                             >
                               <span className="absolute -inset-2.5" />
                               <span className="sr-only">Close panel</span>
