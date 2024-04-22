@@ -24,7 +24,7 @@ import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
 import MessageBox from "./UserMessage/messageBox";
 
 export default function MessagePane() {
-  const msgRef = useRef(null);
+    const msgRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
