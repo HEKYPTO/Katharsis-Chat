@@ -132,3 +132,104 @@ export async function getRoomInformation(roomId: string) {
     }
 }
 
+export async function getAllFriends() {
+    try {
+        const response = await axios.get(`/friends`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`, 
+            }
+        });
+
+        if (response.status === 200) {
+            return response.data; 
+        } else {
+            throw new Error("Failed to fetch friends information");
+        }
+    } catch (error) {
+        console.error("Error fetching friends information:", error);
+        throw error;
+    }
+}
+
+export async function getAllPublicGroups() {
+    try {
+        const response = await axios.get(`/rooms_list/PublicGroup`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`, 
+            }
+        });
+
+        if (response.status === 200) {
+            return response.data; 
+        } else {
+            throw new Error("Failed to fetch PublicGroup information");
+        }
+    } catch (error) {
+        console.error("Error fetching PublicGroup information:", error);
+        throw error;
+    }
+}
+
+export async function getAllPrivateGroups() {
+    try {
+        const response = await axios.get(`/rooms_list/PrivateGroup`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`, 
+            }
+        });
+
+        if (response.status === 200) {
+            return response.data; 
+        } else {
+            throw new Error("Failed to fetch PublicGroup information");
+        }
+    } catch (error) {
+        console.error("Error fetching PublicGroup information:", error);
+        throw error;
+    }
+}
+
+export async function Addmember(roomId: string, Username: string) {
+    try {
+        const response = await axios.post(`/rooms/${roomId}/add_member/${Username}`, {}, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (response.status !== 200) {
+            console.log(response);
+            console.log(roomId, Username);
+            throw new Error("Failed to add member");
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error("Error during add member:", error);
+        throw error;
+    }
+}
+
+export async function Removemember(roomId: string, Username: string) {
+    try {
+        const response = await axios.post(`/rooms/${roomId}/remove_member/${Username}`, {}, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (response.status !== 200) {
+            console.log(response);
+            console.log(roomId, Username);
+            throw new Error("Failed to remove member");
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error("Error during remove member:", error);
+        throw error;
+    }
+}
+
