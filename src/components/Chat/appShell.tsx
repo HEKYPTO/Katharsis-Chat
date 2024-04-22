@@ -17,6 +17,8 @@ import MemberList from './memberBar'
 import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
+import { isLoggedIn, userLogout } from '@/lib/axios'
+import { useRouter } from 'next/navigation';
 
 const navigation = [
   { name: 'Message', href: '#', icon: HomeIcon, current: false },
@@ -53,6 +55,8 @@ export default function ChatPane() {
   const [selectedTeam, setSelectedTeam] = useState(null)
   const [newChatOpen, setNewChatOpen] = useState(false)
 
+  const router = useRouter();
+
   const handleNavigationSelect = (item: any) => {
     setSelectedNavItem(item)
     setNewChatOpen(false)
@@ -66,6 +70,19 @@ export default function ChatPane() {
     setSelectedNavItem(null)
     setNewChatOpen(true)
   }
+
+  const handleSignout = async () => {
+    try {
+      console.log(isLoggedIn())
+      await userLogout();
+      console.log(isLoggedIn())
+      router.push('/login');
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
+  console.log(isLoggedIn())
 
   return (
     <>
@@ -340,6 +357,7 @@ export default function ChatPane() {
                           {({ active }) => (
                             <a
                               href={item.href}
+                              onClick={item.name === 'Sign out' ? handleSignout(): undefined}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'
