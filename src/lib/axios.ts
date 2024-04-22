@@ -51,8 +51,14 @@ export async function userLogin(userName: string, userPassword: string) {
             throw new Error("Failed to log in");
         }
 
+        // console.log(response);
+        // console.log(response.data);
+        // console.log(response.data.accessToken);
+
         // Assuming the token is stored in the response data under the key 'token'
-        const token = response.data.token;
+        const token = response.data.accessToken;
+
+        // console.log(token);
 
         // Set the token to localStorage, sessionStorage, or any other storage mechanism as needed
         localStorage.setItem('token', token);
@@ -66,6 +72,7 @@ export async function userLogin(userName: string, userPassword: string) {
 
 export async function userLogout() {
     try {
+        console.log(localStorage.getItem('token'));
         const response = await axios.post('/login', {}, {
             headers: {
                 'Content-Type': 'application/json',
@@ -80,6 +87,8 @@ export async function userLogout() {
 
         // Clear the token from localStorage
         localStorage.setItem('token', '');
+
+        console.log()
 
         return response.data;
     } catch (error) {
@@ -235,10 +244,6 @@ export async function Removemember(roomId: string, Username: string) {
 }
 
 export function isLoggedIn() {
-    if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('token');
-        return token !== null && token !== '';
-    }
-    return false;
+    console.log(localStorage)
+    return localStorage.getItem('token') !== null && localStorage.getItem('token').length > 50;
 }
-

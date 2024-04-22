@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -17,7 +17,7 @@ import MemberList from './memberBar'
 import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
-import { isLoggedIn, userLogout } from '@/lib/axios'
+import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
 const navigation = [
@@ -39,6 +39,7 @@ const teams = [
   { id: 11, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
   { id: 12, name: 'Workcation', href: '#', initial: 'W', current: false },
 ]
+
 const userNavigation = [
   { name: 'Your profile', href: '#' },
   { name: 'Sign out', href: '#' },
@@ -54,6 +55,16 @@ export default function ChatPane() {
   const [selectedNavItem, setSelectedNavItem] = useState(null)
   const [selectedTeam, setSelectedTeam] = useState(null)
   const [newChatOpen, setNewChatOpen] = useState(false)
+  const [directMessage, setDirectMessage] = useState([]);
+  const [privateGroup, setPrivateGroup] = useState([]);
+  const [publicGroup, setPublicGroup] = useState([]);
+  const [login, setLogin] = useState(false);
+
+  useEffect(() => {
+
+    setLogin(isLoggedIn());
+  }, []);
+  
 
   const router = useRouter();
 
@@ -73,16 +84,37 @@ export default function ChatPane() {
 
   const handleSignout = async () => {
     try {
-      console.log(isLoggedIn())
       await userLogout();
-      console.log(isLoggedIn())
       router.push('/login');
     } catch (error) {
       console.error("Error during logout:", error);
     }
   };
 
-  console.log(isLoggedIn())
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const directMessageData = await getAllFriends();
+            setDirectMessage(directMessageData);
+
+            const privateGroupData = await getAllPrivateGroups();
+            setPrivateGroup(privateGroupData);
+
+            const publicGroupData = await getAllPublicGroups();
+            setPublicGroup(publicGroupData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+      fetchData();
+      console.log(isLoggedIn())
+      console.log(directMessage);
+      console.log(privateGroup);
+  }, []);
+
+  console.log(login)
+  console.log(localStorage)
 
   return (
     <>

@@ -13,7 +13,7 @@ const ExclutedRoute: React.FC<ExcludedRouteProps> = ({ children }) => {
 
     useEffect(() => {
         if (isLoggedIn()) {
-            router.push('/');
+            // router.push('/');
         } else {
             setLoading(false);
         }
