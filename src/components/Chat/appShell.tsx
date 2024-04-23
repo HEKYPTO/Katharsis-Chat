@@ -42,7 +42,6 @@ export default function ChatPane() {
   const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
   const [displayRoom, setDisplayRoom] = useState<GroupRoom[]>([]);
 
-  const [login, setLogin] = useState(false);
   const [username, setUsername] = useState<String | null>('');
 
   const [selectedRoomId, setSelectedRoomId] = useState<String>('')
@@ -50,11 +49,7 @@ export default function ChatPane() {
   const [roomName, setRoomName] = useState<string>('');
   const [roomChat, setRoomChat] = useState<Message[]>([]);
 
-
-  useEffect(() => {
-
-    setLogin(isLoggedIn());
-  }, []);
+  const router = useRouter();
 
   useEffect(() => {
     const name = getUsername();
@@ -65,18 +60,14 @@ export default function ChatPane() {
   }, [])
   
 
-  const router = useRouter();
-
   const handleNavigationSelect = (item: NavItem) => {
 
-    if (item === null) {
-      return;
-    }
+    if (!item) return;
 
     setSelectedNavItem(item);
 
     setDisplayRoom([]);
-    // setSelectedRoom(null);
+    setSelectedRoom(null);
     
     switch (item.name) {
         case 'Message':
@@ -96,11 +87,18 @@ export default function ChatPane() {
     }
 
     setNewChatOpen(false);
-}
-
-  const handleRoomSelect = (team: any) => {
-    setSelectedRoom(team)
   }
+
+  const cleanChat = () => {
+    setRoomMembers([]);
+    setRoomName('');
+    setRoomChat([]);
+  } 
+
+  const handleRoomSelect = async (room: any) => {
+    setSelectedRoom(room);
+    cleanChat();
+  };
 
   const handleNewChatOpen = () => {
     setSelectedNavItem(null)
@@ -183,7 +181,7 @@ export default function ChatPane() {
     }
   
     fetchRoomData();
-  }, [selectedRoom, roomMembers]);
+  }, [selectedRoom]);
 
 
   return (
@@ -284,24 +282,31 @@ export default function ChatPane() {
                         <li>
                           <div className="text-xs font-semibold leading-6 text-gray-400">Your Chats</div>
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
-                            {displayRoom.map((room) => (
-                              <li key={room._id}>
-                                <a
-                                  onClick={() => handleRoomSelect(room)}
-                                  className={classNames(
-                                    selectedRoom === room
-                                      ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                  )}
-                                >
-                                <div className="flex justify-center items-center">
-                                  <UserIcon name={room.name} />
-                                  <span className="truncate ml-2">{room.name}</span>
-                                </div>
-                                </a>
-                              </li>
-                            ))}
+                            {
+                              selectedNavItem && selectedNavItem.name === "Direct" ? (
+                                <div>Hello</div>
+                              ) : (
+                                displayRoom.map((room) => (
+                                  <li key={room._id}>
+                                    <a
+                                      href={'#'}
+                                      onClick={() => handleRoomSelect(room)}
+                                      className={classNames(
+                                        selectedRoom === room
+                                          ? 'bg-gray-50 text-indigo-600'
+                                          : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'
+                                      )}
+                                    >
+                                      <div className="flex justify-center items-center">
+                                        <UserIcon name={room.name} />
+                                        <span className="truncate ml-2">{room.name}</span>
+                                      </div>
+                                    </a>
+                                  </li>
+                                ))
+                              )
+                            }
                           </ul>
                         </li>
                       </ul>
@@ -369,25 +374,31 @@ export default function ChatPane() {
                 <li>
                   <div className="text-xs font-semibold leading-6 text-gray-400">Your Chats</div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
-                    {displayRoom.map((room) => (
-                      <li key={room._id}>
-                        <a
-                          href={'#'}
-                          onClick={() => handleRoomSelect(room)}
-                          className={classNames(
-                            selectedRoom === room
-                              ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'
-                          )}
-                        >
-                        <div className="flex justify-center items-center">
-                          <UserIcon name={room.name} />
-                          <span className="truncate ml-2">{room.name}</span>
-                        </div>
-                        </a>
-                      </li>
-                    ))}
+                    {
+                      selectedNavItem && selectedNavItem.name === "Direct" ? (
+                        <div>Hello</div>
+                      ) : (
+                        displayRoom.map((room) => (
+                          <li key={room._id}>
+                            <a
+                              href={'#'}
+                              onClick={() => handleRoomSelect(room)}
+                              className={classNames(
+                                selectedRoom === room
+                                  ? 'bg-gray-50 text-indigo-600'
+                                  : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'
+                              )}
+                            >
+                              <div className="flex justify-center items-center">
+                                <UserIcon name={room.name} />
+                                <span className="truncate ml-2">{room.name}</span>
+                              </div>
+                            </a>
+                          </li>
+                        ))
+                      )
+                    }
                   </ul>
                 </li>
               </ul>
