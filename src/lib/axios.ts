@@ -112,7 +112,7 @@ export async function createRoom(roomname: string, roomtype: string, member: str
     }
 }
 
-export async function getRoomInformation(roomId: string) {
+export async function viewRoom(roomId: string) {
     try {
         const response = await axios.get(`/rooms/${roomId}`, {
             headers: {
@@ -127,6 +127,25 @@ export async function getRoomInformation(roomId: string) {
         }
     } catch (error) {
         console.error("Error fetching room information:", error);
+        throw error;
+    }
+}
+
+export async function getChatRoom(roomId: string) {
+    try {
+        const response = await axios.get(`/chatroom/${roomId}`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`, 
+            }
+        });
+
+        if (response.status === 200) {
+            return response.data; 
+        } else {
+            throw new Error("Failed to fetch ChatRoom information");
+        }
+    } catch (error) {
+        console.error("Error fetching ChatRoom information:", error);
         throw error;
     }
 }

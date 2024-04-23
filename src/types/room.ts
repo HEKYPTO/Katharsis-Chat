@@ -8,7 +8,13 @@ interface GroupRoom {
 }
 
 interface CreateRoomResponse {
-    room_name: string;
-    room_type: string;
-    members: string;
+    room_id: string;
 }
+
+interface Room {
+    _id: string;
+    created_at: Date;
+    created_by: string;
+    name: string;
+}
+
