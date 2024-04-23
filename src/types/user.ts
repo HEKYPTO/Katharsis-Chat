@@ -7,3 +7,7 @@ interface UserLoginResponse {
     token: string;
     username: string;
 }
+
+interface Friends {
+    friends : string[];
+}

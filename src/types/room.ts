@@ -23,3 +23,18 @@ interface RoomInfo {
     room_members: RoomMember[];
     username: string
 }
+
+interface ChatRoom {
+    _id : string;
+    chat_messages : Message[];
+    created_at : string;
+    created_by : string;
+    name : string;
+    type : string;
+}
+
+interface ViewRoomResponse {
+    room : Room;
+    room_members : RoomMember[];
+    username : string;
+}
