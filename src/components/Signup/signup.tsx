@@ -68,8 +68,8 @@ export default function SignupForm() {
       
     } catch (error) {
       console.error("Error during Signup:", error);
-      if (error.includes("ERR")) {
-        setErr("BadAccount");
+      if (error.code.includes("ERR")) {
+        setErrCode("BadAccount");
       }
     }
   };
