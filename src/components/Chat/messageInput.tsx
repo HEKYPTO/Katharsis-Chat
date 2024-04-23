@@ -1,8 +1,6 @@
-"use client"
-
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
-import useSocket from "@/utils/useSocket";
+import {io} from 'socket.io-client';
 
 interface MessageInputProps {
     name: string;
@@ -12,51 +10,42 @@ interface MessageInputProps {
 export default function MessageInput({ name, room }: MessageInputProps) {
 
   const backURL: string = "https://chat-server-99-4dddce891e1d.herokuapp.com/";
-
-  const [message, setMessage] = useState<String>('');
-  const socket = useSocket(backURL);
+  const [message, setMessage] = useState<string>('');
+  const [socket, setSocket] = useState<any>(undefined);
 
   useEffect(() => {
-    if (!socket) return;
+    const socket = io(backURL);
 
-    socket.emit('join_room', { name, room });
-
-    socket.on('receive_message', (data) => {
-      setMessage((prevMessages) => [...prevMessages, data]);
+    socket.on("receive_message", (data) => {
+      console.log(data);
     });
 
-    // socket.on('join_room_announcement', (data) => {
-    // });
-
-    // socket.on('leave_room_announcement', (data) => {
-    // });
+    setSocket(socket);
 
     return () => {
-      socket.emit('leave_room', { name, room });
+      socket.disconnect();
     };
-  }, [socket, name, room]);
 
-  const handleMessageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  
-    const formData = new FormData(e.target as HTMLFormElement);
-    const message = formData.get('message') as string;
-  
+  }, []);
+
+  const handleMessageSubmit = () => {
     if (message.trim()) {
-      socket.emit('send_message', { name, room, message });
-    }
-    
-    // Clear the input field after submitting
-    setMessage('');
-  };
+      socket.emit('send_message', {
+        username: name,
+        room: room,
+        message: message
+      });
 
+      setMessage(''); 
+    }
+  };
 
   return (
     <div className="fixed bottom-0 left-0 w-full flex justify-center items-end pb-8">
       <div className="w-full max-w-md flex items-center ml-2">
         <label className="sr-only">Message</label>
         <input
-          type="message"
+          type="text"
           name="message"
           id="message"
           value={message}

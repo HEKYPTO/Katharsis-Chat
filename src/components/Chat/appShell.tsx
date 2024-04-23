@@ -76,7 +76,7 @@ export default function ChatPane() {
     setSelectedNavItem(item);
 
     setDisplayRoom([]);
-    setSelectedRoom(null);
+    // setSelectedRoom(null);
     
     switch (item.name) {
         // case 'Message':
@@ -166,13 +166,13 @@ export default function ChatPane() {
         setRoomMembers(fetchedRoomInfo.room_members);
         setRoomName(fetchedRoomInfo.room.name);
 
-        console.log(roomMembers)
+        // console.log(roomMembers)
   
         const fetchedRoomChat = await getChatRoom(thisRoom);
 
         if (!fetchedRoomChat) return;
 
-        console.log(fetchedRoomChat.chat_messages)
+        // console.log(fetchedRoomChat.chat_messages)
 
         setRoomChat(fetchedRoomChat.chat_messages);
   
@@ -468,8 +468,8 @@ export default function ChatPane() {
               ) : (
                 <div>
                   <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers}/>
-                  {selectedRoomId.length > 0 && (
-                    <MessageInput name={username} room={selectedRoomId.length}/> 
+                  {selectedRoomId.length > 0 && username && selectedRoomId && (
+                    <MessageInput name={username} room={selectedRoomId}/> 
                   )}
                   <MessagePane message={roomChat} />
                 </div>
