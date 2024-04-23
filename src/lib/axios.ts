@@ -262,6 +262,27 @@ export async function Removemember(roomId: string, Username: string) {
     }
 }
 
+export async function GetDirectRoomId(friendname: string) {
+    try {
+        const response = await axios.get(`/rooms/direct/${friendname}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (response.status !== 200) {
+            console.log(response);
+            throw new Error("Failed to Get Direct RoomId");
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error("Error during Get Direct RoomId:", error);
+        throw error;
+    }
+}
+
 export function isLoggedIn(): boolean {
     try {
         const token = localStorage.getItem('token');
