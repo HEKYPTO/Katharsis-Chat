@@ -39,21 +39,21 @@ export default function MemberList({ isOpen, closeMember, roomId, member }: Memb
   }, [getUsername()]);
 
   useEffect(() => {
-      if (!member) return;
-
-      console.log(member);
-
-      setMembers(member);
-
-  }, [member])
-
-  useEffect(() => {
 
     if (!roomId) return;
 
     setRoom(roomId);
 
   }, [roomId])
+
+  useEffect(() => {
+
+    if (!member) return;
+
+    setMembers(member);
+
+  }, [member])
+
 
   useEffect(() => {
     const fetchFriends = async (): Promise<void> => {
