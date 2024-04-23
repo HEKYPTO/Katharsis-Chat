@@ -1,2 +1,2 @@
 
-type ChatType = 'PublicGroup' | 'PrivateGroup' | 'Direct';
+type ChatTypes = 'PublicGroup' | 'PrivateGroup' | 'Direct' | '';

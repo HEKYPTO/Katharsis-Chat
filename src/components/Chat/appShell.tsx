@@ -41,10 +41,13 @@ export default function ChatPane() {
   const [privateGroup, setPrivateGroup] = useState<GroupRoom[]>([]);
   const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
   const [displayRoom, setDisplayRoom] = useState<GroupRoom[]>([]);
-  const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
-  const [roomChat, setRoomChat] = useState<ChatMessage | null>(null);
+
   const [login, setLogin] = useState(false);
   const [username, setUsername] = useState<String | null>('');
+
+  const [roomMembers, setRoomMembers] = useState<RoomMember[]>([]);
+  const [roomName, setRoomName] = useState<string>('');
+  const [roomChat, setRoomChat] = useState<ChatRoom | null>(null);
 
   useEffect(() => {
 
@@ -52,8 +55,11 @@ export default function ChatPane() {
   }, []);
 
   useEffect(() => {
+    const name = getUsername();
 
-    setUsername(getUsername());
+    if (!name) return;
+
+    setUsername(name);
   }, [])
   
 
@@ -75,7 +81,8 @@ export default function ChatPane() {
         //     setDisplayRoom(directMessage. || []);
         //     break;
         case 'Chat':
-            setDisplayRoom(privateGroup || []);
+            if (!privateGroup) return;
+            setDisplayRoom(privateGroup);
             break;
         case 'Global':
             setDisplayRoom(publicGroup || []);
@@ -143,21 +150,28 @@ export default function ChatPane() {
       try {
         if (!selectedRoom) return;
         const thisRoom: string = selectedRoom._id;
-        console.log(thisRoom);
+  
+        const fetchedRoomInfo = await viewRoom(thisRoom);
 
-        const roomInfo = await viewRoom(thisRoom);
+        if (!fetchedRoomInfo) return;
 
-        if (roomInfo) setRoomInfo(roomInfo);
-      
-        const roomMessage = await getChatRoom(thisRoom);
+        console.log(fetchedRoomInfo)
+        console.log(fetchedRoomInfo.room_members)
+        console.log(fetchedRoomInfo.room.name)
 
-        if (roomMessage) setRoomChat(roomMessage);
+        setRoomMembers(fetchedRoomInfo.room_members);
+        setRoomName(fetchedRoomInfo.room.name);
 
-
+        console.log(roomMembers)
+  
+        const fetchedRoomChat = await getChatRoom(thisRoom);
+        setRoomChat(fetchedRoomChat);
+  
       } catch (error) {
-        console.error("Error room member data:", error);
+        console.error("Error fetching room data:", error);
       }
     }
+  
     fetchRoomData();
   }, [selectedRoom]);
 
@@ -381,16 +395,17 @@ export default function ChatPane() {
             {/* Separator */}
             <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
 
-            <div className="flex justify-start items-center">
-            <button
-              className="block text-sm text-gray-700 rounded-full mr-1 hover:bg-gray-200 py-1 px-1"
-              onClick={() => setMemberOpen(true)}
-            >
-              <UserCircleIcon className="h-6 w-6 text-gray-700" />
-            </button>
-              <span>Chat Name</span>
-            </div>
-
+            {roomName.length != 0 && (
+              <div className="flex justify-start items-center">
+                <button
+                  className="block text-sm text-gray-700 rounded-full mr-1 hover:bg-gray-200 py-1 px-1"
+                  onClick={() => setMemberOpen(true)}
+                >
+                  <UserCircleIcon className="h-6 w-6 text-gray-700" />
+                </button>
+                  <span className="font-medium">{roomName}</span>
+              </div>
+            )}
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 justify-end">
               <div className="flex items-center gap-x-4 lg:gap-x-6 right">
@@ -443,8 +458,8 @@ export default function ChatPane() {
                 <NewChatPage closeFunction={closeChat}/>
               ) : (
                 <div>
-                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} roomInformation={roomInfo}/>
-                  <MessageInput message={roomChat}/> 
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers}/>
+                  <MessageInput /> 
                   <MessagePane />
                 </div>
               )}
