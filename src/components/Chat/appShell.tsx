@@ -160,13 +160,9 @@ export default function ChatPane() {
   
         const fetchedRoomInfo = await viewRoom(selectedRoomId);
 
-        console.log(fetchedRoomInfo);
-
         if (!fetchedRoomInfo) return;
 
-        setRoomMembers(fetchedRoomInfo.room_members);
-
-        console.log(roomMembers)
+        setRoomMembers(fetchedRoomInfo.roomMembers);
 
   
         const fetchedRoomChat = await getChatRoom(selectedRoomId);
