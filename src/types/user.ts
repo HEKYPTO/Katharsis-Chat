@@ -3,5 +3,7 @@ interface User {
     password: string;
 }
 
-
-  
+interface UserLoginResponse {
+    token: string;
+    username: string;
+}
