@@ -45,9 +45,11 @@ export default function ChatPane() {
   const [login, setLogin] = useState(false);
   const [username, setUsername] = useState<String | null>('');
 
+  const [selectedRoomId, setSelectedRoomId] = useState<String>('')
   const [roomMembers, setRoomMembers] = useState<RoomMember[]>([]);
   const [roomName, setRoomName] = useState<string>('');
   const [roomChat, setRoomChat] = useState<Message[]>([]);
+
 
   useEffect(() => {
 
@@ -150,6 +152,8 @@ export default function ChatPane() {
       try {
         if (!selectedRoom) return;
         const thisRoom: string = selectedRoom._id;
+
+        setSelectedRoomId(thisRoom);
   
         const fetchedRoomInfo = await viewRoom(thisRoom);
 
@@ -178,7 +182,7 @@ export default function ChatPane() {
     }
   
     fetchRoomData();
-  }, [selectedRoom]);
+  }, [selectedRoom, roomMembers]);
 
 
   return (
@@ -464,7 +468,9 @@ export default function ChatPane() {
               ) : (
                 <div>
                   <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers}/>
-                  <MessageInput /> 
+                  {selectedRoomId.length > 0 && (
+                    <MessageInput name={username} room={selectedRoomId.length}/> 
+                  )}
                   <MessagePane message={roomChat} />
                 </div>
               )}

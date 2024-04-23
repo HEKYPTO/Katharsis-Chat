@@ -22,7 +22,7 @@ export default function MessageBox(props: MessageBoxProps) {
                 </span>
                 <div className="ml-2">
                     <span className="font-bold mr-2">{name}</span>
-                    <span>{time}</span>
+                    <span className="text-sm text-gray-400">{time}</span>
                     <div className="mt-1 px-4 py-2 bg-gray-100 rounded-lg mr-2">
                         <pre className="whitespace-pre-wrap">{message}</pre>
                     </div>

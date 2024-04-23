@@ -43,7 +43,7 @@ export default function MessagePane({ message }: messagePaneProp) {
     useEffect(() => {
 
         setChatMessage(message);
-        
+
     }, [message])
 
     useLayoutEffect(() => {
@@ -61,12 +61,14 @@ export default function MessagePane({ message }: messagePaneProp) {
         ) : (
             <div className="mt-2">
                 {chatMessage.map((single) => (
-                    <MessageBox
-                    key={single.created_at}
-                    username={single.sender}
-                    datetime={single.created_at}
-                    message={single.message}
-                    />
+                    <div key={single.created_at}>
+                        <MessageBox
+                        username={single.sender}
+                        datetime={single.created_at}
+                        message={single.message}
+                        />
+                    </div>
+
                 ))}
             </div>
         )}
