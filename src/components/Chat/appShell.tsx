@@ -79,15 +79,16 @@ export default function ChatPane() {
     // setSelectedRoom(null);
     
     switch (item.name) {
-        // case 'Message':
-        //     setDisplayRoom(directMessage. || []);
-        //     break;
+        case 'Message':
+            setDisplayRoom(directMessage);
+            console.log(displayRoom)
+            break;
         case 'Chat':
             if (!privateGroup) return;
             setDisplayRoom(privateGroup);
             break;
         case 'Global':
-            setDisplayRoom(publicGroup || []);
+            setDisplayRoom(publicGroup);
             break;
         default:
             setDisplayRoom([]); 

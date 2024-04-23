@@ -68,6 +68,9 @@ export default function SignupForm() {
       
     } catch (error) {
       console.error("Error during Signup:", error);
+      if (error.includes("ERR")) {
+        setErr("BadAccount");
+      }
     }
   };
 
@@ -164,6 +167,10 @@ export default function SignupForm() {
                     />
                   </div>
                 </div>
+              )}
+
+              {errCode === "BadAccount" && (
+                <p className="text-sm leading-6 text-red-400">* Please use different account to sign up.</p>
               )}
 
               {errCode === "PasswordMismatch" && (
