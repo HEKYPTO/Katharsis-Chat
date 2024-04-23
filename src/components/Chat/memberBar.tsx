@@ -9,6 +9,7 @@ import UserIcon from '../Misc/UserIcon'
 interface MemberProps {
   isOpen: boolean;
   closeMember: () => void;
+  roomInformation: any, // !!tbd
 }
 
 const team = [
@@ -16,8 +17,6 @@ const team = [
     name: 'Leslie Alexander',
     handle: 'lesliealexander',
     href: '#',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', //rm this
     status: 'online',
   },
   // More people...
@@ -27,12 +26,17 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function MemberList({ isOpen, closeMember }: MemberProps) {
+export default function MemberList({ isOpen, closeMember, roomInformation }: MemberProps) {
   const [open, setOpen] = useState(isOpen);
+  const [roomMember, setRoomMember] = useState(null);
 
   useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);
+
+  useEffect(() => {
+    setRoomMember(roomInformation.room_members);
+  }, [roomInformation])
 
   const handleClose = () => {
     setOpen(false);

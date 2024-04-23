@@ -18,7 +18,7 @@ import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
 import UserIcon from '../Misc/UserIcon'
-import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups } from '@/lib/axios'
+import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, getRoomInformation } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
 const navigation: NavItem[] = [
@@ -26,13 +26,6 @@ const navigation: NavItem[] = [
   { name: 'Chat', icon: UsersIcon },
   { name: 'Global', icon: FolderIcon },
 ]
-
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
-
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -42,12 +35,13 @@ export default function ChatPane() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [memberOpen, setMemberOpen] = useState(false)
   const [selectedNavItem, setSelectedNavItem] = useState<NavItem | null>(null);
-  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState<GroupRoom | null>(null);
   const [newChatOpen, setNewChatOpen] = useState(false);
   const [directMessage, setDirectMessage] = useState([]);
   const [privateGroup, setPrivateGroup] = useState<GroupRoom[]>([]);
   const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
   const [displayRoom, setDisplayRoom] = useState<GroupRoom[]>([]);
+  const [roomInfo, setRoomInfo] = useState();
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
@@ -59,7 +53,7 @@ export default function ChatPane() {
   const router = useRouter();
 
   const handleNavigationSelect = (item: NavItem) => {
-    
+
     if (item === null) {
       return;
     }
@@ -90,8 +84,8 @@ export default function ChatPane() {
     setNewChatOpen(false);
 }
 
-  const handleTeamSelect = (team: any) => {
-    setSelectedTeam(team)
+  const handleRoomSelect = (team: any) => {
+    setSelectedRoom(team)
   }
 
   const handleNewChatOpen = () => {
@@ -135,6 +129,23 @@ export default function ChatPane() {
 
       fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchRoomInfo = async () => {
+      try {
+        if (!selectedRoom) return;
+        const thisRoom: string = selectedRoom._id;
+        const roomInfo = await getRoomInformation(thisRoom);
+
+        if (roomInfo) {
+          setRoomInfo(roomInfo);
+        }
+
+      } catch (error) {
+        console.error("Error room member data:", error);
+      }
+    }
+  }, [selectedRoom]);
 
 
   return (
@@ -238,9 +249,9 @@ export default function ChatPane() {
                             {displayRoom.map((room) => (
                               <li key={room._id}>
                                 <a
-                                  onClick={() => handleTeamSelect(room)}
+                                  onClick={() => handleRoomSelect(room)}
                                   className={classNames(
-                                    selectedTeam === room
+                                    selectedRoom === room
                                       ? 'bg-gray-50 text-indigo-600'
                                       : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -418,7 +429,7 @@ export default function ChatPane() {
                 <NewChatPage />
               ) : (
                 <div>
-                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} />
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} roomInformation={roomInfo}/>
                   <MessageInput /> 
                   <MessagePane />
                 </div>
