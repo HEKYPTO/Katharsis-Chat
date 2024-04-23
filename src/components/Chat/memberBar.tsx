@@ -9,7 +9,7 @@ import UserIcon from '../Misc/UserIcon'
 interface MemberProps {
   isOpen: boolean;
   closeMember: () => void;
-  roomInformation: RoomInfo;
+  members: RoomMember[];
 }
 
 const team = [
@@ -26,22 +26,18 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function MemberList({ isOpen, closeMember, roomInformation }: MemberProps) {
+export default function MemberList({ isOpen, closeMember, members }: MemberProps) {
   const [open, setOpen] = useState(isOpen);
-  const [roomMember, setRoomMember] = useState<RoomMember[]>([]);
+  const [roomMembers, setMembers] = useState(members);
+
 
   useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);
 
   useEffect(() => {
-
-    if (!roomInformation) return;
-
-    console.log(roomMember);
-
-    setRoomMember(roomInformation.room_members);
-  }, [roomInformation])
+    setMembers(members);
+  }, [members]);
 
   const handleClose = () => {
     setOpen(false);
@@ -98,7 +94,7 @@ export default function MemberList({ isOpen, closeMember, roomInformation }: Mem
                       </button>
                     </div>
                     <ul role="list" className="flex-1 divide-y divide-gray-200 overflow-y-auto">
-                      { roomMember.map((person: RoomMember) => (
+                      { roomMembers.map((person: RoomMember) => (
                         <li key={person.username}>
                           <div className="group relative flex items-center px-5 py-6">
                             <a href={"#"} className="-m-1 block flex-1 p-1">

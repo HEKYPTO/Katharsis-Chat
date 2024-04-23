@@ -14,7 +14,7 @@ interface ChatProps {
 }
 
 export default function NewChatPage({ closeFunction }: ChatProps) {
-  const [chatType, setChatType] = useState<ChatType>('');
+  const [chatType, setChatType] = useState<ChatTypes>("");
   const [groupName, setGroupName] = useState<string>('');
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
@@ -81,6 +81,8 @@ export default function NewChatPage({ closeFunction }: ChatProps) {
       }
 
       const concatMem: string = members.join(",");
+
+      console.log(concatMem)
 
       const createdRoom = await createRoom(groupName, chatType, concatMem);
       console.log('New group created:', createdRoom);
