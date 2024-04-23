@@ -12,3 +12,5 @@ interface ChatMessage {
     name: string;
     type: string;
 }
+
+type MessageType = 'PublicGroup' | 'PrivateGroup' | 'Direct';
