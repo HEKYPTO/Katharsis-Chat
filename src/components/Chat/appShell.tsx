@@ -37,7 +37,7 @@ export default function ChatPane() {
   const [selectedNavItem, setSelectedNavItem] = useState<NavItem | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<GroupRoom | null>(null);
   const [newChatOpen, setNewChatOpen] = useState(false);
-  const [directMessage, setDirectMessage] = useState([]);
+  const [directMessage, setDirectMessage] = useState<GroupRoom[]>([]);
   const [privateGroup, setPrivateGroup] = useState<GroupRoom[]>([]);
   const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
   const [displayRoom, setDisplayRoom] = useState<GroupRoom[]>([]);
@@ -72,7 +72,7 @@ export default function ChatPane() {
     switch (item.name) {
         case 'Message':
             setDisplayRoom(directMessage);
-            console.log(displayRoom)
+            console.log(directMessage)
             break;
         case 'Chat':
             if (!privateGroup) return;
@@ -95,7 +95,7 @@ export default function ChatPane() {
     setRoomChat([]);
   } 
 
-  const handleRoomSelect = async (room: any) => {
+  const handleRoomSelect = async (room: string) => {
     setSelectedRoom(room);
     cleanChat();
   };
@@ -131,7 +131,13 @@ export default function ChatPane() {
     const fetchData = async () => {
         try {
             const directMessageData = await getAllFriends();
-            setDirectMessage(directMessageData);
+
+            const transformed = directMessageData.friends.map((name, index) => ({
+              _id: "_" + index, 
+              name: name
+            }));
+
+            setDirectMessage(transformed);
 
             const privateGroupData = await getAllPrivateGroups();
             setPrivateGroup(privateGroupData);
@@ -146,6 +152,7 @@ export default function ChatPane() {
       fetchData();
   }, []);
 
+  //rm ??
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
@@ -158,20 +165,13 @@ export default function ChatPane() {
 
         if (!fetchedRoomInfo) return;
 
-        // console.log(fetchedRoomInfo)
-        // console.log(fetchedRoomInfo.room_members)
-        // console.log(fetchedRoomInfo.room.name)
-
         setRoomMembers(fetchedRoomInfo.room_members);
         setRoomName(fetchedRoomInfo.room.name);
 
-        // console.log(roomMembers)
   
         const fetchedRoomChat = await getChatRoom(thisRoom);
 
         if (!fetchedRoomChat) return;
-
-        // console.log(fetchedRoomChat.chat_messages)
 
         setRoomChat(fetchedRoomChat.chat_messages);
   
