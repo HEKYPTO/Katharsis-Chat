@@ -26,6 +26,8 @@ function classNames(...classes: string[]) {
 
 export default function NewChatPage() {
   const [chatType, setChatType] = useState('');
+  const [groupName, setGroupName] = useState('');
+  const [members, setMembers] = useState<string[]>([]);
 
   return (
     <form className='mt-20 mb-20 mx-16'>

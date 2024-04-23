@@ -30,9 +30,11 @@ export async function userSignup(userName: string, userPassword: string) {
 
         // Assuming the token is stored in the response data under the key 'token'
         const token = response.data.token;
+        const username = response.data.username;
 
         // Set the token to localStorage, sessionStorage, or any other storage mechanism as needed
         localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
 
         return response.data;
     } catch (error) {
@@ -64,11 +66,13 @@ export async function userLogin(userName: string, userPassword: string) {
 
         // Assuming the token is stored in the response data under the key 'token'
         const token = response.data.accessToken;
+        const username = response.data.username;
 
         // console.log(token);
 
         // Set the token to localStorage, sessionStorage, or any other storage mechanism as needed
         localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
 
         return response.data;
     } catch (error) {
@@ -80,6 +84,7 @@ export async function userLogin(userName: string, userPassword: string) {
 export function userLogout() {
     try {
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         return true; 
     } catch (error) {
         console.error("Error during Logout:", error);
