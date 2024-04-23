@@ -7,11 +7,14 @@ import { useState, useEffect } from 'react';
 export default function Greeter() {
 
   const [login, setLogin] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
 
     setLogin(isLoggedIn());
-  }, []);
+    setLoaded(true);
+
+  }, [isLoggedIn()]);
 
   return (
     <div className="bg-white h-screen">
@@ -29,20 +32,20 @@ export default function Greeter() {
               />
             </a>
           </div>
-          {isLoggedIn() ? (
-            <a href="/chat" className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
-              To chat <span>&rarr;</span>
-            </a>
-          ) : (
-            <div className="lg:flex lg:flex-1 lg:justify-end">
-              <a href="/signup" className="text-sm font-semibold leading-6 text-gray-900 mr-8 hover:text-gray-700">
-                Sign up
+            {!loaded ? <div></div> : login ? (
+              <a href="/chat" className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
+                To chat <span>&rarr;</span>
               </a>
-              <a href="/login" className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
-                Log in <span>&rarr;</span>
-              </a>
-            </div>
-          )}
+            ) : (
+              <div className="lg:flex lg:flex-1 lg:justify-end">
+                <a href="/signup" className="text-sm font-semibold leading-6 text-gray-900 mr-8 hover:text-gray-700">
+                  Sign up
+                </a>
+                <a href="/login" className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
+                  Log in <span>&rarr;</span>
+                </a>
+              </div>
+            )}
         </nav>
       </header>
 
