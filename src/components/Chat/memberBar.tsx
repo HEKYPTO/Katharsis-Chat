@@ -12,16 +12,6 @@ interface MemberProps {
   members: RoomMember[];
 }
 
-const team = [
-  {
-    name: 'Leslie Alexander',
-    handle: 'lesliealexander',
-    href: '#',
-    status: 'online',
-  },
-  // More people...
-]
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }

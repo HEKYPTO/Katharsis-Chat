@@ -47,7 +47,7 @@ export default function ChatPane() {
 
   const [roomMembers, setRoomMembers] = useState<RoomMember[]>([]);
   const [roomName, setRoomName] = useState<string>('');
-  const [roomChat, setRoomChat] = useState<ChatRoom | null>(null);
+  const [roomChat, setRoomChat] = useState<Message[]>([]);
 
   useEffect(() => {
 
@@ -155,9 +155,9 @@ export default function ChatPane() {
 
         if (!fetchedRoomInfo) return;
 
-        console.log(fetchedRoomInfo)
-        console.log(fetchedRoomInfo.room_members)
-        console.log(fetchedRoomInfo.room.name)
+        // console.log(fetchedRoomInfo)
+        // console.log(fetchedRoomInfo.room_members)
+        // console.log(fetchedRoomInfo.room.name)
 
         setRoomMembers(fetchedRoomInfo.room_members);
         setRoomName(fetchedRoomInfo.room.name);
@@ -165,7 +165,12 @@ export default function ChatPane() {
         console.log(roomMembers)
   
         const fetchedRoomChat = await getChatRoom(thisRoom);
-        setRoomChat(fetchedRoomChat);
+
+        if (!fetchedRoomChat) return;
+
+        console.log(fetchedRoomChat.chat_messages)
+
+        setRoomChat(fetchedRoomChat.chat_messages);
   
       } catch (error) {
         console.error("Error fetching room data:", error);
@@ -460,7 +465,7 @@ export default function ChatPane() {
                 <div>
                   <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers}/>
                   <MessageInput /> 
-                  <MessagePane />
+                  <MessagePane message={roomChat} />
                 </div>
               )}
             </div>

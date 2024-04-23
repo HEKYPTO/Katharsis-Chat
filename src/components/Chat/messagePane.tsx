@@ -24,7 +24,7 @@ import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
 import MessageBox from "./UserMessage/messageBox";
 
 interface messagePaneProp {
-    message: ChatMessage;
+    message: Message[];
 }
 
 export default function MessagePane({ message }: messagePaneProp) {
@@ -42,10 +42,8 @@ export default function MessagePane({ message }: messagePaneProp) {
 
     useEffect(() => {
 
-        if (!message) return;
-
-        setChatMessage(message.chat_messages);
-
+        setChatMessage(message);
+        
     }, [message])
 
     useLayoutEffect(() => {
