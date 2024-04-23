@@ -1,4 +1,5 @@
 import Axios from "axios";
+import { headers } from "next/headers";
 
 const axios = Axios.create({
     baseURL : "https://chat-server-99-4dddce891e1d.herokuapp.com/"
@@ -116,9 +117,11 @@ export async function viewRoom(roomId: string) {
     try {
         const response = await axios.get(`/rooms/${roomId}`, {
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('token')}`, 
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         });
+
+        console.log(response)
 
         if (response.status === 200) {
             return response.data; 

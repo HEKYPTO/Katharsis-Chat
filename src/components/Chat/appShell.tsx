@@ -18,7 +18,7 @@ import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
 import UserIcon from '../Misc/UserIcon'
-import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, getRoomInformation } from '@/lib/axios'
+import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
 const navigation: NavItem[] = [
@@ -60,11 +60,8 @@ export default function ChatPane() {
 
     setSelectedNavItem(item);
 
-    console.log(directMessage);
-    console.log(privateGroup);
-    console.log(publicGroup);
-
     setDisplayRoom([]);
+    setSelectedRoom(null);
     
     switch (item.name) {
         // case 'Message':
@@ -135,16 +132,20 @@ export default function ChatPane() {
       try {
         if (!selectedRoom) return;
         const thisRoom: string = selectedRoom._id;
-        const roomInfo = await getRoomInformation(thisRoom);
+        console.log(thisRoom);
+        const roomInfo = await viewRoom(thisRoom);
 
         if (roomInfo) {
           setRoomInfo(roomInfo);
         }
 
+        console.log(roomInfo)
+
       } catch (error) {
         console.error("Error room member data:", error);
       }
     }
+    fetchRoomInfo();
   }, [selectedRoom]);
 
 
@@ -335,9 +336,9 @@ export default function ChatPane() {
                       <li key={room._id}>
                         <a
                           href={'#'}
-                          onClick={() => handleTeamSelect(room)}
+                          onClick={() => handleRoomSelect(room)}
                           className={classNames(
-                            selectedTeam === room
+                            selectedRoom === room
                               ? 'bg-gray-50 text-indigo-600'
                               : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'

@@ -18,3 +18,8 @@ interface Room {
     name: string;
 }
 
+interface RoomInfo {
+    room: Room;
+    room_members: RoomMember[];
+    username: string
+}

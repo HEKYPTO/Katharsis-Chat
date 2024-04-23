@@ -9,7 +9,7 @@ import UserIcon from '../Misc/UserIcon'
 interface MemberProps {
   isOpen: boolean;
   closeMember: () => void;
-  roomInformation: any, // !!tbd
+  roomInformation: RoomInfo;
 }
 
 const team = [
@@ -28,13 +28,16 @@ function classNames(...classes: string[]) {
 
 export default function MemberList({ isOpen, closeMember, roomInformation }: MemberProps) {
   const [open, setOpen] = useState(isOpen);
-  const [roomMember, setRoomMember] = useState(null);
+  const [roomMember, setRoomMember] = useState<RoomMember[]>([]);
 
   useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);
 
   useEffect(() => {
+
+    if (!roomInformation) return;
+
     setRoomMember(roomInformation.room_members);
   }, [roomInformation])
 
@@ -93,25 +96,17 @@ export default function MemberList({ isOpen, closeMember, roomInformation }: Mem
                       </button>
                     </div>
                     <ul role="list" className="flex-1 divide-y divide-gray-200 overflow-y-auto">
-                      {team.map((person) => (
-                        <li key={person.handle}>
+                      { roomMember.map((person: RoomMember) => (
+                        <li key={person.username}>
                           <div className="group relative flex items-center px-5 py-6">
-                            <a href={person.href} className="-m-1 block flex-1 p-1">
+                            <a href={"#"} className="-m-1 block flex-1 p-1">
                               <div className="absolute inset-0 group-hover:bg-gray-50" aria-hidden="true" />
                               <div className="relative flex min-w-0 flex-1 items-center">
                                 <span className="relative inline-block flex-shrink-0">
-                                  <UserIcon name={person.name}/>
-                                  <span
-                                    className={classNames(
-                                      person.status === 'online' ? 'bg-green-400' : 'bg-gray-300',
-                                      'absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white'
-                                    )}
-                                    aria-hidden="true"
-                                  />
+                                  <UserIcon name={person.username}/>
                                 </span>
                                 <div className="ml-4 truncate">
-                                  <p className="truncate text-sm font-medium text-gray-900">{person.name}</p>
-      
+                                  <p className="truncate text-sm font-medium text-gray-900">{person.username}</p>
                                 </div>
                               </div>
                             </a>
@@ -146,36 +141,25 @@ export default function MemberList({ isOpen, closeMember, roomInformation }: Mem
                                             'block px-4 py-2 text-sm'
                                           )}
                                         >
-                                          View profile
-                                        </a>
-                                      )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <a
-                                          href="#"
-                                          className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                            'block px-4 py-2 text-sm'
-                                          )}
-                                        >
                                           Send message
                                         </a>
                                       )}
                                     </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <a
-                                          href="#"
-                                          className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                            'block px-4 py-2 text-sm'
-                                          )}
-                                        >
-                                          Remove Member
-                                        </a>
-                                      )}
-                                    </Menu.Item>
+                                    { person.is_room_admin && (
+                                        <Menu.Item>
+                                        {({ active }) => (
+                                          <a
+                                            href="#"
+                                            className={classNames(
+                                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                              'block px-4 py-2 text-sm'
+                                            )}
+                                          >
+                                            Remove Member
+                                          </a>
+                                        )}
+                                      </Menu.Item>
+                                    )}
                                   </div>
                                 </Menu.Items>
                               </Transition>
