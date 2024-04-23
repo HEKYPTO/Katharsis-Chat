@@ -136,7 +136,7 @@ export async function viewRoom(roomId: string) {
 
 export async function getChatRoom(roomId: string) {
     try {
-        const response = await axios.get(`/chatroom/${roomId}`, {
+        const response = await axios.get(`/chatRoom/${roomId}`, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`, 
             }
