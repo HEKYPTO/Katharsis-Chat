@@ -18,7 +18,7 @@ import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
 import UserIcon from '../Misc/UserIcon'
-import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom } from '@/lib/axios'
+import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom, getChatRoom } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
 const navigation: NavItem[] = [

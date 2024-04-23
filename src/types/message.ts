@@ -1,5 +1,5 @@
 interface Message {
-    created_at: Date;
+    created_at: string;
     message: string;
     sender: string;
 }

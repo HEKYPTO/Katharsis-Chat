@@ -45,6 +45,7 @@ export default function MessagePane({ message }: messagePaneProp) {
         if (!message) return;
 
         setChatMessage(message.chat_messages);
+
     }, [message])
 
     useLayoutEffect(() => {
@@ -56,7 +57,9 @@ export default function MessagePane({ message }: messagePaneProp) {
     return (
         <div className="max-h-[calc(100vh-10rem)] overflow-y-auto ml-2" ref={msgRef}>
         {isLoading ? (
-            <div></div>
+            <div>
+                
+            </div>
         ) : (
             <div className="mt-2">
                 {chatMessage.map((single) => (

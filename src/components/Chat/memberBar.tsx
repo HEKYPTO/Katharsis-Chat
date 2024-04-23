@@ -38,6 +38,8 @@ export default function MemberList({ isOpen, closeMember, roomInformation }: Mem
 
     if (!roomInformation) return;
 
+    console.log(roomMember);
+
     setRoomMember(roomInformation.room_members);
   }, [roomInformation])
 
