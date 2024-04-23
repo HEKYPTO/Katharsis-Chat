@@ -23,9 +23,14 @@ In laborum est duis commodo aliqua cupidatat Lorem ut in tempor cupidatat commod
 import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
 import MessageBox from "./UserMessage/messageBox";
 
-export default function MessagePane() {
+interface messagePaneProp {
+    message: ChatMessage;
+}
+
+export default function MessagePane({ message }: messagePaneProp) {
     const msgRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [chatMessage, setChatMessage] = useState<Message[]>([]);
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -34,6 +39,13 @@ export default function MessagePane() {
 
         return () => clearTimeout(delay);
     }, []);
+
+    useEffect(() => {
+
+        if (!message) return;
+
+        setChatMessage(message.chat_messages);
+    }, [message])
 
     useLayoutEffect(() => {
         if (!isLoading && msgRef.current) {
@@ -47,16 +59,14 @@ export default function MessagePane() {
             <div></div>
         ) : (
             <div className="mt-2">
-            <MessageBox
-                username="John Doe"
-                datetime="2024-04-21T12:00:00"
-                message={messageLong}
-            />
-            <MessageBox
-                username="John Doe"
-                datetime="2024-04-21T12:00:00"
-                message={messageLong}
-            />
+                {chatMessage.map((single) => (
+                    <MessageBox
+                    key={single.created_at}
+                    username={single.sender}
+                    datetime={single.created_at}
+                    message={single.message}
+                    />
+                ))}
             </div>
         )}
         </div>

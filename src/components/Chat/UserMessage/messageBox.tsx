@@ -1,5 +1,6 @@
 
 interface MessageBoxProps {
+    key: string;
     username: string,
     datetime: string,
     message: string
@@ -11,9 +12,10 @@ export default function MessageBox(props: MessageBoxProps) {
     const initials = name ? name.charAt(0).toUpperCase() : '';
     const time = props.datetime || '';
     const message = props.message ? props.message.toString() : '';
+    const key = props.key;
 
     return (
-        <div>
+        <div key={key}>
             <div className="flex mb-2">
                 <span className="flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border font-medium bg-white text-gray-400 border-gray-200">
                     {initials}
