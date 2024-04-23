@@ -262,7 +262,7 @@ export async function Removemember(roomId: string, Username: string) {
     }
 }
 
-export async function GetDirectRoomId(friendname: string) {
+export async function getDirectRoomId(friendname: string) {
     try {
         const response = await axios.get(`/rooms/direct/${friendname}`, {
             headers: {
