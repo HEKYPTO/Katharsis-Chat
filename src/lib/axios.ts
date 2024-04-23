@@ -76,30 +76,12 @@ export async function userLogin(userName: string, userPassword: string) {
     }
 }
 
-export async function userLogout() {
+export function userLogout() {
     try {
-        console.log(localStorage.getItem('token'));
-        const response = await axios.post('/logout', {}, {
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-
-        if (response.status !== 200) {
-            console.log(response);
-            throw new Error("Failed to log out");
-        }
-
-        // Clear the token from localStorage
-        localStorage.setItem('token', '');
-
-        console.log()
-
-        return response.data;
+        localStorage.removeItem('token');
+        return true; 
     } catch (error) {
         console.error("Error during Logout:", error);
-        console.log(error.message);
         throw error;
     }
 }
