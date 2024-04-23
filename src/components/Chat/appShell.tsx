@@ -41,9 +41,9 @@ function classNames(...classes: string[]) {
 export default function ChatPane() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [memberOpen, setMemberOpen] = useState(false)
-  const [selectedNavItem, setSelectedNavItem] = useState(null)
-  const [selectedTeam, setSelectedTeam] = useState(null)
-  const [newChatOpen, setNewChatOpen] = useState(false)
+  const [selectedNavItem, setSelectedNavItem] = useState<NavItem | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [newChatOpen, setNewChatOpen] = useState(false);
   const [directMessage, setDirectMessage] = useState([]);
   const [privateGroup, setPrivateGroup] = useState<GroupRoom[]>([]);
   const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
@@ -59,6 +59,11 @@ export default function ChatPane() {
   const router = useRouter();
 
   const handleNavigationSelect = (item: NavItem) => {
+    
+    if (item === null) {
+      return;
+    }
+
     setSelectedNavItem(item);
 
     console.log(directMessage);
