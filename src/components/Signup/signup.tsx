@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from "react"
 import { userSignup } from "@/lib/axios";
 import { useRouter } from 'next/navigation';
 
-export default function SignuoForm() {
+export default function SignupForm() {
 
   const router = useRouter();
   const [submitTimes, setSubmitTimes] = useState(0);
@@ -59,6 +59,8 @@ export default function SignuoForm() {
     try {
       const { username, password } = formData;
       const response = await userSignup(username, password);
+
+      console.log(response);
 
       console.log("Signup successful:", response);
 

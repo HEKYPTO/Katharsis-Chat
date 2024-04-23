@@ -396,13 +396,13 @@ export default function ChatPane() {
                         <Menu.Item key={item.name}>
                           {({ active }) => (
                             <button
-                              onClick={item.event}
-                              className={classNames(
-                                active ? 'bg-gray-50' : '',
-                                'block w-full px-3 py-1 text-sm leading-6 text-gray-900'
-                              )}
+                                onClick={item.event}
+                                className={classNames(
+                                    active ? 'bg-gray-50' : '',
+                                    'flex justify-start items-center w-full py-2 px-3 text-sm text-gray-900'
+                                )}
                             >
-                              {item.name}
+                                {item.name}
                             </button>
                           )}
                         </Menu.Item>

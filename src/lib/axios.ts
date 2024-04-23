@@ -15,10 +15,16 @@ export async function userSignup(userName: string, userPassword: string) {
             }
         });
 
-        if (response.status !== 200) {
+        console.log(response);
+
+        if (response.status === 401) {
             console.log(response);
             console.log(userName, userPassword);
             throw new Error("Failed to log in");
+        }
+
+        if ("error" in response.data) {
+            return response;
         }
 
         // Assuming the token is stored in the response data under the key 'token'
@@ -73,7 +79,7 @@ export async function userLogin(userName: string, userPassword: string) {
 export async function userLogout() {
     try {
         console.log(localStorage.getItem('token'));
-        const response = await axios.post('/login', {}, {
+        const response = await axios.post('/logout', {}, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
@@ -93,6 +99,7 @@ export async function userLogout() {
         return response.data;
     } catch (error) {
         console.error("Error during Logout:", error);
+        console.log(error.message);
         throw error;
     }
 }

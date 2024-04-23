@@ -66,7 +66,7 @@ export default function MemberList({ isOpen, closeMember }: MemberProps) {
                               <button
                               type="button"
                               className="relative rounded-md bg-white text-gray-400 hover:text-gray-500"
-                              onClick={() => handleClose}
+                              onClick={handleClose}
                             >
                               <span className="absolute -inset-2.5" />
                               <span className="sr-only">Close panel</span>
@@ -156,6 +156,19 @@ export default function MemberList({ isOpen, closeMember }: MemberProps) {
                                           )}
                                         >
                                           Send message
+                                        </a>
+                                      )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <a
+                                          href="#"
+                                          className={classNames(
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm'
+                                          )}
+                                        >
+                                          Remove Member
                                         </a>
                                       )}
                                     </Menu.Item>
