@@ -232,7 +232,12 @@ export async function Removemember(roomId: string, Username: string) {
     }
 }
 
-export function isLoggedIn() {
-    console.log(localStorage)
-    return localStorage.getItem('token') !== null && localStorage.getItem('token').length > 50;
+export function isLoggedIn(): boolean {
+    try {
+        const token = localStorage.getItem('token');
+        return !!token;
+    } catch (error) {
+        console.error("Error checking login status:", error);
+        return false;
+    }
 }

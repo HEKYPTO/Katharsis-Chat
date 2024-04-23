@@ -17,27 +17,20 @@ import MemberList from './memberBar'
 import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
+import UserIcon from '../Misc/UserIcon'
 import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
-const navigation = [
-  { name: 'Message', href: '#', icon: HomeIcon, current: false },
-  { name: 'Chat', href: '#', icon: UsersIcon, current: false },
-  { name: 'Global', href: '#', icon: FolderIcon, current: false },
+const navigation: NavItem[] = [
+  { name: 'Message', icon: HomeIcon },
+  { name: 'Chat', icon: UsersIcon },
+  { name: 'Global', icon: FolderIcon },
 ]
+
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
   { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-  { id: 4, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 5, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 6, name: 'Workcation', href: '#', initial: 'W', current: false },
-  { id: 7, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 8, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 9, name: 'Workcation', href: '#', initial: 'W', current: false },
-  { id: 10, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 11, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 12, name: 'Workcation', href: '#', initial: 'W', current: false },
 ]
 
 
@@ -52,8 +45,9 @@ export default function ChatPane() {
   const [selectedTeam, setSelectedTeam] = useState(null)
   const [newChatOpen, setNewChatOpen] = useState(false)
   const [directMessage, setDirectMessage] = useState([]);
-  const [privateGroup, setPrivateGroup] = useState([]);
-  const [publicGroup, setPublicGroup] = useState([]);
+  const [privateGroup, setPrivateGroup] = useState<GroupRoom[]>([]);
+  const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
+  const [displayRoom, setDisplayRoom] = useState<GroupRoom[]>([]);
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
@@ -64,10 +58,32 @@ export default function ChatPane() {
 
   const router = useRouter();
 
-  const handleNavigationSelect = (item: any) => {
-    setSelectedNavItem(item)
-    setNewChatOpen(false)
-  }
+  const handleNavigationSelect = (item: NavItem) => {
+    setSelectedNavItem(item);
+
+    console.log(directMessage);
+    console.log(privateGroup);
+    console.log(publicGroup);
+
+    privateGroup.map(e => console.log(e))
+    
+    switch (item.name) {
+        // case 'Message':
+        //     setDisplayRoom(directMessage. || []);
+        //     break;
+        case 'Chat':
+            setDisplayRoom(privateGroup || []);
+            break;
+        case 'Global':
+            setDisplayRoom(publicGroup || []);
+            break;
+        default:
+            setDisplayRoom([]); 
+            break;
+    }
+
+    setNewChatOpen(false);
+}
 
   const handleTeamSelect = (team: any) => {
     setSelectedTeam(team)
@@ -81,7 +97,7 @@ export default function ChatPane() {
   const handleSignout = async () => {
     try {
       await userLogout();
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -113,16 +129,8 @@ export default function ChatPane() {
     };
 
       fetchData();
-      console.log(isLoggedIn())
-      console.log(directMessage);
-      console.log(privateGroup);
   }, []);
 
-  console.log(login)
-  console.log(localStorage)
-
-
-  
 
   return (
     <>
@@ -186,7 +194,7 @@ export default function ChatPane() {
                             {navigation.map((item) => (
                               <li key={item.name}>
                                 <a
-                                  href={item.href}
+                                  href={"#"}
                                   onClick={() => handleNavigationSelect(item)}
                                   className={classNames(
                                     selectedNavItem === item ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
@@ -222,29 +230,21 @@ export default function ChatPane() {
                         <li>
                           <div className="text-xs font-semibold leading-6 text-gray-400">Your Chats</div>
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
-                            {teams.map((team) => (
-                              <li key={team.name}>
+                            {displayRoom.map((room) => (
+                              <li key={room._id}>
                                 <a
-                                  onClick={() => handleTeamSelect(team)}
-                                  href={team.href}
+                                  onClick={() => handleTeamSelect(room)}
                                   className={classNames(
-                                    selectedTeam === team
+                                    selectedTeam === room
                                       ? 'bg-gray-50 text-indigo-600'
                                       : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
                                 >
-                                  <span
-                                    className={classNames(
-                                      selectedTeam === team
-                                        ? 'text-indigo-600 border-indigo-600'
-                                        : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                      'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
-                                    )}
-                                  >
-                                    {team.initial}
-                                  </span>
-                                  <span className="truncate">{team.name}</span>
+                                <div className="flex justify-center items-center">
+                                  <UserIcon name={room.name} />
+                                  <span className="truncate ml-2">{room.name}</span>
+                                </div>
                                 </a>
                               </li>
                             ))}
@@ -279,7 +279,7 @@ export default function ChatPane() {
                     {navigation.map((item) => (
                       <li key={item.name}>
                         <a
-                          href={item.href}
+                          href={"#"}
                           onClick={() => handleNavigationSelect(item)}
                           className={classNames(
                             selectedNavItem === item ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
@@ -315,29 +315,20 @@ export default function ChatPane() {
                 <li>
                   <div className="text-xs font-semibold leading-6 text-gray-400">Your Chats</div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
-                    {teams.map((team) => (
-                      <li key={team.name}>
+                    {displayRoom.map((room) => (
+                      <li key={room.name}>
                         <a
-                          href={team.href}
-                          onClick={() => handleTeamSelect(team)}
+                          href={'#'}
+                          onClick={() => handleTeamSelect(room)}
                           className={classNames(
-                            selectedTeam === team
+                            selectedTeam === room
                               ? 'bg-gray-50 text-indigo-600'
                               : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
                         >
-                          <span
-                            className={classNames(
-                              selectedTeam === team
-                                ? 'text-indigo-600 border-indigo-600'
-                                : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                              'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
-                            )}
-                          >
-                            {team.initial}
-                          </span>
-                          <span className="truncate">{team.name}</span>
+                        <UserIcon name={room.name} />
+                          <span className="truncate">{room.name}</span>
                         </a>
                       </li>
                     ))}
