@@ -67,10 +67,6 @@ export default function ChatPane() {
     if (!item) return;
 
     setSelectedNavItem(item);
-
-    setDisplayRoom([]);
-    setSelectedRoomId('');
-    setSelectedRoomName('');
     
     switch (item.name) {
         case 'Message':
@@ -164,9 +160,14 @@ export default function ChatPane() {
   
         const fetchedRoomInfo = await viewRoom(selectedRoomId);
 
+        console.log(fetchedRoomInfo);
+
         if (!fetchedRoomInfo) return;
 
         setRoomMembers(fetchedRoomInfo.room_members);
+
+        console.log(roomMembers)
+
   
         const fetchedRoomChat = await getChatRoom(selectedRoomId);
 
@@ -515,7 +516,7 @@ export default function ChatPane() {
                 <NewChatPage closeFunction={closeChat}/>
               ) : (
                 <div>
-                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers}/>
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers} roomId={selectedRoomId}/>
                   {selectedRoomId.length > 0 && username && selectedRoomId && (
                     <MessageInput name={username} room={selectedRoomId}/> 
                   )}

@@ -30,6 +30,7 @@ export default function MessageInput({ name, room }: MessageInputProps) {
 
   const handleMessageSubmit = () => {
     if (message.trim()) {
+      console.log({name, room, message});
       socket.emit('send_message', {
         username: name,
         room: room,

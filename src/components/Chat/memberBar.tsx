@@ -1,38 +1,130 @@
 "use client"
 
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, FormEvent} from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon, UserPlusIcon } from '@heroicons/react/24/outline'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import UserIcon from '../Misc/UserIcon'
+import { Addmember, getAllFriends, getUsername, Removemember, viewRoom } from '@/lib/axios'
 
 interface MemberProps {
   isOpen: boolean;
   closeMember: () => void;
-  members: RoomMember[];
+  roomId: string;
+  member: RoomMember[];
 }
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function MemberList({ isOpen, closeMember, members }: MemberProps) {
+export default function MemberList({ isOpen, closeMember, roomId, member }: MemberProps) {
   const [open, setOpen] = useState(isOpen);
-  const [roomMembers, setMembers] = useState(members);
+  const [members, setMembers] = useState<RoomMember[]>([]);
+  const [friends, setFriends] = useState<string[]>([]);
+  const [newMember, setNewMember] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [room, setRoom] = useState<string>(roomId);
+
+  const [errText, setErrText] = useState("");
+  const [okText, setOkText] = useState("");
+
+  useEffect(() => {
+    const name = getUsername();
+
+    if (!name) return;
+
+    setUsername(name);
+
+  }, [getUsername()]);
+
+  useEffect(() => {
+      if (!member) return;
+
+      console.log(member);
+
+      setMembers(member);
+
+  }, [member])
+
+  useEffect(() => {
+
+    if (!roomId) return;
+
+    setRoom(roomId);
+
+  }, [roomId])
+
+  useEffect(() => {
+    const fetchFriends = async (): Promise<void> => {
+      try {
+        const fetchedFriendsResponse = await getAllFriends();
+        const fetchedFriends: string[] = fetchedFriendsResponse.friends || [];
+        
+        const uniqueFriends: string[] = fetchedFriends.filter((friend: string, index: number, self: string[]) => self.indexOf(friend) === index);
+
+        setFriends(uniqueFriends);
+  
+      } catch (error) {
+        console.error('Error fetching friends:', error);
+      }
+    };
+  
+    fetchFriends();
+  
+  }, []);
 
 
   useEffect(() => {
     setOpen(isOpen);
   }, [isOpen]);
 
-  useEffect(() => {
-    setMembers(members);
-  }, [members]);
-
   const handleClose = () => {
     setOpen(false);
     closeMember(); 
   };
+
+  const handleAddUser = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (friends.includes(newMember) && !members.some(member => member.username === newMember)) {
+      console.log('Adding member:', newMember);
+
+      try {
+        const response = Addmember(roomId, newMember);
+        setNewMember('');
+
+        console.log(response)
+
+      } catch (error) {
+        console.error("Failed To add User" + error);
+      }
+
+    }
+
+  };
+
+  const handleRemoveUser = (name: string) => {
+    if (members.some(member => member.username === name)) {
+        console.log('Removing member:', name);
+        try {
+            const response = Removemember(roomId, name);
+            setNewMember('');
+            console.log(response);
+        } catch (error) {
+            console.error("Failed To Remove User", error);
+        }
+    }
+};
+
+  function isRoomAdmin(username: string, roomData: RoomMember[]) {
+    for (const member of roomData) {
+        if (member.username === username && member.is_room_admin) {
+            return true;
+        }
+    }
+    return false;
+  }
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -73,18 +165,18 @@ export default function MemberList({ isOpen, closeMember, members }: MemberProps
                     <div className="flex items-center ml-5">
                       <label className="sr-only">Message</label>
                       <input
-                        type="user"
-                        name="username"
-                        id="username"
+                        type="text"
+                        value={newMember}
+                        onChange={(e) => setNewMember(e.target.value)}
                         className="flex-1 block rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
                         placeholder="Find or Add Member"
                       />
-                      <button type="button" className="ml-2 mr-5 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white p-2">
+                      <button type="button" onClick={handleAddUser} className="ml-2 mr-5 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white p-2">
                         <UserPlusIcon className="h-5 w-5" />
                       </button>
                     </div>
                     <ul role="list" className="flex-1 divide-y divide-gray-200 overflow-y-auto">
-                      { roomMembers.map((person: RoomMember) => (
+                      { members.map((person: RoomMember) => (
                         <li key={person.username}>
                           <div className="group relative flex items-center px-5 py-6">
                             <a href={"#"} className="-m-1 block flex-1 p-1">
@@ -133,11 +225,12 @@ export default function MemberList({ isOpen, closeMember, members }: MemberProps
                                         </a>
                                       )}
                                     </Menu.Item>
-                                    { person.is_room_admin && (
+                                    { isRoomAdmin(username, members) && (
                                         <Menu.Item>
                                         {({ active }) => (
                                           <a
                                             href="#"
+                                            onClick={() => handleRemoveUser(person.username)}
                                             className={classNames(
                                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                               'block px-4 py-2 text-sm'
