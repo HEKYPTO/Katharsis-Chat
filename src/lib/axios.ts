@@ -271,3 +271,15 @@ export function isLoggedIn(): boolean {
         return false;
     }
 }
+
+export function getUsername() {
+    try {
+        if (isLoggedIn()) {
+            const userName = localStorage.getItem('username');
+            return userName;
+        }
+
+    } catch(error) {
+        console.error("Error getting username:", error);
+    }
+}

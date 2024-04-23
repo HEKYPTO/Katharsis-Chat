@@ -18,7 +18,7 @@ import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
 import UserIcon from '../Misc/UserIcon'
-import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom, getChatRoom } from '@/lib/axios'
+import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom, getChatRoom, getUsername } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
 const navigation: NavItem[] = [
@@ -44,11 +44,17 @@ export default function ChatPane() {
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const [roomChat, setRoomChat] = useState<ChatMessage | null>(null);
   const [login, setLogin] = useState(false);
+  const [username, setUsername] = useState<String | null>('');
 
   useEffect(() => {
 
     setLogin(isLoggedIn());
   }, []);
+
+  useEffect(() => {
+
+    setUsername(getUsername());
+  }, [])
   
 
   const router = useRouter();
@@ -108,6 +114,10 @@ export default function ChatPane() {
     { name: 'Your profile', event: handleViewProfile },
     { name: 'Sign out', event: handleSignout },
   ]
+
+  const closeChat = () => {
+    setNewChatOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -390,7 +400,7 @@ export default function ChatPane() {
                   <Menu.Button className="-m-1.5 flex items-center p-1.5">
                     <span className="lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900">
-                        Tom Cook
+                        {username}
                       </span>
                       <ChevronDownIcon className="hidden ml-2 h-5 w-5 text-gray-400" aria-hidden="true"/>
                     </span>
@@ -430,7 +440,7 @@ export default function ChatPane() {
           <main className="">
             <div className="bg-white">
               {newChatOpen ? (
-                <NewChatPage />
+                <NewChatPage closeFunction={closeChat}/>
               ) : (
                 <div>
                   <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} roomInformation={roomInfo}/>
