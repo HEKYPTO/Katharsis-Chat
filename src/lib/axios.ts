@@ -115,7 +115,7 @@ export async function createRoom(roomname: string, roomtype: string, member: str
 
 export async function viewRoom(roomId: string) {
     try {
-        const response = await axios.get(`/rooms/${roomId}`, {
+        const response = await axios.get(`/rooms/${roomId}/`, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
