@@ -65,7 +65,7 @@ export default function ChatPane() {
     console.log(privateGroup);
     console.log(publicGroup);
 
-    privateGroup.map(e => console.log(e))
+    setDisplayRoom([]);
     
     switch (item.name) {
         // case 'Message':
@@ -316,7 +316,7 @@ export default function ChatPane() {
                   <div className="text-xs font-semibold leading-6 text-gray-400">Your Chats</div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {displayRoom.map((room) => (
-                      <li key={room.name}>
+                      <li key={room._id}>
                         <a
                           href={'#'}
                           onClick={() => handleTeamSelect(room)}
@@ -324,11 +324,13 @@ export default function ChatPane() {
                             selectedTeam === room
                               ? 'bg-gray-50 text-indigo-600'
                               : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'
                           )}
                         >
-                        <UserIcon name={room.name} />
-                          <span className="truncate">{room.name}</span>
+                        <div className="flex justify-center items-center">
+                          <UserIcon name={room.name} />
+                          <span className="truncate ml-2">{room.name}</span>
+                        </div>
                         </a>
                       </li>
                     ))}
