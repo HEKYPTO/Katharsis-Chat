@@ -115,8 +115,9 @@ export async function createRoom(roomname: string, roomtype: string, member: str
 
 export async function viewRoom(roomId: string) {
     try {
-        const response = await axios.get(`/rooms/${roomId}/`, {
+        const response = await axios.get(`/rooms/${roomId}/`,  {
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         });
@@ -136,6 +137,7 @@ export async function getChatRoom(roomId: string) {
     try {
         const response = await axios.get(`/chatRoom/${roomId}`, {
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`, 
             }
         });
@@ -155,6 +157,7 @@ export async function getAllFriends() {
     try {
         const response = await axios.get(`/friends`, {
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`, 
             }
         });
@@ -174,6 +177,7 @@ export async function getAllPublicGroups() {
     try {
         const response = await axios.get(`/rooms_list/PublicGroup`, {
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`, 
             }
         });
@@ -193,6 +197,7 @@ export async function getAllPrivateGroups() {
     try {
         const response = await axios.get(`/rooms_list/PrivateGroup`, {
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`, 
             }
         });
