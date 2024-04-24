@@ -97,13 +97,13 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
 
         console.log(response)
 
-        activate();
-
       } catch (error) {
         console.error("Failed To add User" + error);
       }
 
     }
+
+    activate();
 
   };
 
@@ -115,12 +115,12 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
             setNewMember('');
             console.log(response);
 
-            activate();
-
         } catch (error) {
             console.error("Failed To Remove User", error);
         }
     }
+
+    activate();
 };
 
   function isRoomAdmin(username: string, roomData: RoomMember[]) {

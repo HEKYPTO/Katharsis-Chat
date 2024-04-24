@@ -4,9 +4,10 @@ import MessageBox from "./UserMessage/messageBox";
 
 interface messagePaneProp {
     message: Message[];
+    activate: () => void;
 }
 
-export default function MessagePane({ message }: messagePaneProp) {
+export default function MessagePane({ message, activate }: messagePaneProp) {
     const msgRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [chatMessage, setChatMessage] = useState<Message[]>([]);

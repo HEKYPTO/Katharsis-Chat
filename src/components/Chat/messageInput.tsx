@@ -5,16 +5,17 @@ import {io} from 'socket.io-client';
 interface MessageInputProps {
     name: string;
     room: string;
+    activate: () => void;
 }
 
-export default function MessageInput({ name, room }: MessageInputProps) {
+export default function MessageInput({ name, room, activate }: MessageInputProps) {
 
   const backURL: string = "https://chat-server-99-4dddce891e1d.herokuapp.com/";
   const [message, setMessage] = useState<string>('');
   const [socket, setSocket] = useState<any>(undefined);
 
   useEffect(() => {
-    const socket = io(backURL);
+    const socket = io(backURL, {transports: ['websocket']});
 
     socket.on("receive_message", (data) => {
       console.log(data);
@@ -38,6 +39,7 @@ export default function MessageInput({ name, room }: MessageInputProps) {
       });
 
       setMessage(''); 
+      activate();
     }
   };
 

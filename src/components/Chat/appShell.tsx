@@ -114,6 +114,7 @@ export default function ChatPane() {
   const handleNewChatOpen = () => {
     setSelectedNavItem(null)
     setNewChatOpen(true)
+    
   }
 
   const handleSignout = async () => {
@@ -523,7 +524,7 @@ export default function ChatPane() {
                 <div>
                   <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers} roomId={selectedRoomId} activate={justUpdate}/>
                   {selectedRoomId.length > 0 && username && selectedRoomId && (
-                    <MessageInput name={username} room={selectedRoomId} activate={justUpdate}/> 
+                    <MessageInput name={username} room={selectedRoomId} activate={justUpdate} /> 
                   )}
                   <MessagePane message={roomChat} activate={justUpdate}/>
                 </div>

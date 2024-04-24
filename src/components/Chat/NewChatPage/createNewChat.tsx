@@ -11,10 +11,9 @@ function classNames(...classes: string[]): string {
 
 interface ChatProps {
   closeFunction: () => void;
-  activate: () => void;
 }
 
-export default function NewChatPage({ closeFunction, activate }: ChatProps) {
+export default function NewChatPage({ closeFunction }: ChatProps) {
   const [chatType, setChatType] = useState<MessageType>("Direct");
   const [groupName, setGroupName] = useState<string>('');
   const [members, setMembers] = useState<string[]>([]);
@@ -89,11 +88,12 @@ export default function NewChatPage({ closeFunction, activate }: ChatProps) {
       console.log('New group created:', createdRoom);
 
       setGroupName('');
-      setChatType('');
+      setChatType('Direct');
       setMembers([]);
 
-      closeFunction();
       activate();
+
+      closeFunction();
     } catch (error) {
       console.error('Error creating new group:', error);
     }
