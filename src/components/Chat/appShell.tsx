@@ -479,7 +479,7 @@ export default function ChatPane() {
                 <NewChatPage closeFunction={closeChat}/>
               ) : (
                 <div>
-                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} members={roomMembers}/>
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers}/>
                   {selectedRoomId.length > 0 && username && selectedRoomId && (
                     <MessageInput name={username} room={selectedRoomId}/> 
                   )}
