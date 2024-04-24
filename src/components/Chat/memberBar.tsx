@@ -12,13 +12,14 @@ interface MemberProps {
   closeMember: () => void;
   roomId: string;
   member: RoomMember[];
+  activate: () => void;
 }
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function MemberList({ isOpen, closeMember, roomId, member }: MemberProps) {
+export default function MemberList({ isOpen, closeMember, roomId, member, activate }: MemberProps) {
   const [open, setOpen] = useState(isOpen);
   const [members, setMembers] = useState<RoomMember[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
@@ -96,6 +97,8 @@ export default function MemberList({ isOpen, closeMember, roomId, member }: Memb
 
         console.log(response)
 
+        activate();
+
       } catch (error) {
         console.error("Failed To add User" + error);
       }
@@ -111,6 +114,9 @@ export default function MemberList({ isOpen, closeMember, roomId, member }: Memb
             const response = Removemember(roomId, name);
             setNewMember('');
             console.log(response);
+
+            activate();
+
         } catch (error) {
             console.error("Failed To Remove User", error);
         }

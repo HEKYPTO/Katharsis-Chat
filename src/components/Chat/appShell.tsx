@@ -51,6 +51,12 @@ export default function ChatPane() {
 
   const [roomChat, setRoomChat] = useState<Message[]>([]);
 
+  const [updater, setUpdater] = useState<boolean>(false);
+
+  const justUpdate = () => {
+    setUpdater(!updater);
+  }
+
   const router = useRouter();
 
   useEffect(() => {
@@ -165,7 +171,7 @@ export default function ChatPane() {
         const fetchedRoomInfo = await viewRoom(selectedRoomId);
 
         if (!fetchedRoomInfo) return;
-        
+
         setRoomMembers(fetchedRoomInfo.room_members);
 
         console.log(roomMembers);
@@ -217,7 +223,7 @@ export default function ChatPane() {
       fetchRoomData();
     }
 
-  }, [selectedRoomId]);
+  }, [selectedRoomId, updater]);
 
 
   return (
@@ -515,11 +521,11 @@ export default function ChatPane() {
                 <NewChatPage closeFunction={closeChat}/>
               ) : (
                 <div>
-                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers} roomId={selectedRoomId}/>
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers} roomId={selectedRoomId} activate={justUpdate}/>
                   {selectedRoomId.length > 0 && username && selectedRoomId && (
-                    <MessageInput name={username} room={selectedRoomId}/> 
+                    <MessageInput name={username} room={selectedRoomId} activate={justUpdate}/> 
                   )}
-                  <MessagePane message={roomChat} />
+                  <MessagePane message={roomChat} activate={justUpdate}/>
                 </div>
               )}
             </div>
