@@ -14,7 +14,7 @@ interface ChatProps {
 }
 
 export default function NewChatPage({ closeFunction }: ChatProps) {
-  const [chatType, setChatType] = useState<ChatTypes>("");
+  const [chatType, setChatType] = useState<MessageType>("Direct");
   const [groupName, setGroupName] = useState<string>('');
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);

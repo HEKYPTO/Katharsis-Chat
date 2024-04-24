@@ -18,7 +18,7 @@ import MessageInput from './messageInput'
 import MessagePane from './messagePane'
 import NewChatPage from './NewChatPage/createNewChat'
 import UserIcon from '../Misc/UserIcon'
-import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom, getChatRoom, getUsername } from '@/lib/axios'
+import { isLoggedIn, userLogout, getAllFriends, getAllPublicGroups, getAllPrivateGroups, viewRoom, getChatRoom, getUsername, getDirectRoomId } from '@/lib/axios'
 import { useRouter } from 'next/navigation';
 
 const navigation: NavItem[] = [
@@ -35,18 +35,20 @@ export default function ChatPane() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [memberOpen, setMemberOpen] = useState<boolean>(false)
   const [selectedNavItem, setSelectedNavItem] = useState<NavItem | null>(null);
-  const [selectedRoom, setSelectedRoom] = useState<GroupRoom | null>(null);
+
   const [newChatOpen, setNewChatOpen] = useState(false);
   const [directMessage, setDirectMessage] = useState<GroupRoom[]>([]);
   const [privateGroup, setPrivateGroup] = useState<GroupRoom[]>([]);
   const [publicGroup, setPublicGroup] = useState<GroupRoom[]>([]);
   const [displayRoom, setDisplayRoom] = useState<GroupRoom[]>([]);
 
-  const [username, setUsername] = useState<String | null>('');
+  const [username, setUsername] = useState<string | null>('');
 
-  const [selectedRoomId, setSelectedRoomId] = useState<String>('')
-  const [roomMembers, setRoomMembers] = useState<RoomMember[]>([]);
-  const [roomName, setRoomName] = useState<string>('');
+  const [selectedRoomId, setSelectedRoomId] = useState<string>("")
+  const [selectedRoomName, setSelectedRoomName] = useState<string>("");
+
+  const [roomMembers, setRoomMembers] = useState([]);
+
   const [roomChat, setRoomChat] = useState<Message[]>([]);
 
   const router = useRouter();
@@ -65,9 +67,6 @@ export default function ChatPane() {
     if (!item) return;
 
     setSelectedNavItem(item);
-
-    setDisplayRoom([]);
-    setSelectedRoom(null);
     
     switch (item.name) {
         case 'Message':
@@ -91,13 +90,19 @@ export default function ChatPane() {
 
   const cleanChat = () => {
     setRoomMembers([]);
-    setRoomName('');
+    setSelectedRoomName('');
     setRoomChat([]);
   } 
 
-  const handleRoomSelect = async (room: string) => {
-    setSelectedRoom(room);
-    cleanChat();
+  const handleRoomSelect = async (room: any) => {
+    const id = room._id;
+    const name = room.name;
+
+    cleanChat()
+
+    setSelectedRoomId(id);
+    setSelectedRoomName(name);
+
   };
 
   const handleNewChatOpen = () => {
@@ -114,12 +119,8 @@ export default function ChatPane() {
     }
   };
 
-  const handleViewProfile = async () => {
-
-  };
 
   const userNavigation = [
-    { name: 'Your profile', event: handleViewProfile },
     { name: 'Sign out', event: handleSignout },
   ]
 
@@ -132,7 +133,7 @@ export default function ChatPane() {
         try {
             const directMessageData = await getAllFriends();
 
-            const transformed = directMessageData.friends.map((name, index) => ({
+            const transformed = directMessageData.friends.map((name: string, index: number) => ({
               _id: "_" + index, 
               name: name
             }));
@@ -152,24 +153,24 @@ export default function ChatPane() {
       fetchData();
   }, []);
 
-  //rm ??
+  useEffect(() => {
+    console.log(roomMembers);
+  }, [roomMembers]);
+
   useEffect(() => {
     const fetchRoomData = async () => {
-      try {
-        if (!selectedRoom) return;
-        const thisRoom: string = selectedRoom._id;
 
-        setSelectedRoomId(thisRoom);
+      try {
   
-        const fetchedRoomInfo = await viewRoom(thisRoom);
+        const fetchedRoomInfo = await viewRoom(selectedRoomId);
 
         if (!fetchedRoomInfo) return;
-
+        
         setRoomMembers(fetchedRoomInfo.room_members);
-        setRoomName(fetchedRoomInfo.room.name);
 
+        console.log(roomMembers);
   
-        const fetchedRoomChat = await getChatRoom(thisRoom);
+        const fetchedRoomChat = await getChatRoom(selectedRoomId);
 
         if (!fetchedRoomChat) return;
 
@@ -179,9 +180,44 @@ export default function ChatPane() {
         console.error("Error fetching room data:", error);
       }
     }
+
+    const fetchDirectRoom = async () => {
+      
+      try {
+        const fetchRoom = await getDirectRoomId(selectedRoomName);
+
+        if (!fetchRoom) return;
+
+        const directRoomId = fetchRoom._id; // pragma later
+
+        // const fetchedRoomInfo = await viewRoom(directRoomId);
+
+        // if (!fetchedRoomInfo) return;
+
+        // setRoomMembers(fetchedRoomInfo.room_members);
   
-    fetchRoomData();
-  }, [selectedRoom]);
+        // const fetchedRoomChat = await getChatRoom(directRoomId);
+
+        // if (!fetchedRoomChat) return;
+
+        // setRoomChat(fetchedRoomChat.chat_messages);
+
+        setSelectedRoomId(directRoomId)
+
+      } catch (error) {
+        console.error("Error fetching room data:", error);
+      }
+    }
+
+    if (!selectedRoomId ) return;
+
+    if (selectedRoomId[0] === '_') {
+      fetchDirectRoom();
+    } else {
+      fetchRoomData();
+    }
+
+  }, [selectedRoomId]);
 
 
   return (
@@ -292,7 +328,7 @@ export default function ChatPane() {
                                       href={'#'}
                                       onClick={() => handleRoomSelect(room)}
                                       className={classNames(
-                                        selectedRoom === room
+                                        selectedRoomId === room._id
                                           ? 'bg-gray-50 text-indigo-600'
                                           : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'
@@ -384,7 +420,7 @@ export default function ChatPane() {
                               href={'#'}
                               onClick={() => handleRoomSelect(room)}
                               className={classNames(
-                                selectedRoom === room
+                                selectedRoomId === room._id
                                   ? 'bg-gray-50 text-indigo-600'
                                   : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold overflow-x-auto whitespace-nowrap'
@@ -416,7 +452,7 @@ export default function ChatPane() {
             {/* Separator */}
             <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
 
-            {roomName.length != 0 && (
+            {selectedRoomName != "" && (
               <div className="flex justify-start items-center">
                 <button
                   className="block text-sm text-gray-700 rounded-full mr-1 hover:bg-gray-200 py-1 px-1"
@@ -424,7 +460,7 @@ export default function ChatPane() {
                 >
                   <UserCircleIcon className="h-6 w-6 text-gray-700" />
                 </button>
-                  <span className="font-medium">{roomName}</span>
+                  <span className="font-medium">{selectedRoomName}</span>
               </div>
             )}
 
@@ -479,7 +515,7 @@ export default function ChatPane() {
                 <NewChatPage closeFunction={closeChat}/>
               ) : (
                 <div>
-                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers}/>
+                  <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers} roomId={selectedRoomId}/>
                   {selectedRoomId.length > 0 && username && selectedRoomId && (
                     <MessageInput name={username} room={selectedRoomId}/> 
                   )}
