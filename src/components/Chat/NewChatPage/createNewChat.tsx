@@ -92,9 +92,8 @@ export default function NewChatPage({ closeFunction, activate }: ChatProps) {
       setChatType('Direct');
       setMembers([]);
 
-      activate();
-
       closeFunction();
+      activate();
     } catch (error) {
       console.error('Error creating new group:', error);
     }

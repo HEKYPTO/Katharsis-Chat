@@ -519,7 +519,7 @@ export default function ChatPane() {
           <main className="">
             <div className="bg-white">
               {newChatOpen ? (
-                <NewChatPage closeFunction={closeChat}/>
+                <NewChatPage closeFunction={closeChat} activate={justUpdate}/>
               ) : (
                 <div>
                   <MemberList isOpen={memberOpen} closeMember={() => setMemberOpen(!memberOpen)} member={roomMembers} roomId={selectedRoomId} activate={justUpdate}/>
