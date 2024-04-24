@@ -103,6 +103,7 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
       }
 
     }
+
     activate();
     setPulse(!pulse);
   };

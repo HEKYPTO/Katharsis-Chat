@@ -15,7 +15,7 @@ interface ChatProps {
 }
 
 export default function NewChatPage({ closeFunction, activate }: ChatProps) {
-  const [chatType, setChatType] = useState<MessageType>("Direct");
+  const [chatType, setChatType] = useState<string>("");
   const [groupName, setGroupName] = useState<string>('');
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
@@ -81,7 +81,11 @@ export default function NewChatPage({ closeFunction, activate }: ChatProps) {
         return;
       }
 
+
+
       const concatMem: string = members.join(",");
+
+      console.log({ groupName, chatType, concatMem});
 
       console.log(concatMem)
 

@@ -9,16 +9,16 @@ interface messagePaneProp {
 
 export default function MessagePane({ message, activate }: messagePaneProp) {
     const msgRef = useRef<HTMLDivElement>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [chatMessage, setChatMessage] = useState<Message[]>([]);
 
-    useEffect(() => {
-        const delay = setTimeout(() => {
-        setIsLoading(false);
-        }, 1000);
+    // useEffect(() => {
+    //     const delay = setTimeout(() => {
+    //     setIsLoading(false);
+    //     }, 1000);
 
-        return () => clearTimeout(delay);
-    }, []);
+    //     return () => clearTimeout(delay);
+    // }, []);
 
     useEffect(() => {
 

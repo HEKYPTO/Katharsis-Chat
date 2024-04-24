@@ -53,6 +53,7 @@ export default function ChatPane() {
 
   const [updater, setUpdater] = useState<boolean>(false);
 
+
   const justUpdate = () => {
     setUpdater(!updater);
   }
@@ -133,6 +134,7 @@ export default function ChatPane() {
 
   const closeChat = () => {
     setNewChatOpen(false);
+    setDisplayRoom([])
   };
 
   useEffect(() => {
@@ -158,7 +160,7 @@ export default function ChatPane() {
     };
 
       fetchData();
-  }, []);
+  }, [updater]);
 
   useEffect(() => {
     console.log(roomMembers);
@@ -224,7 +226,7 @@ export default function ChatPane() {
       fetchRoomData();
     }
 
-  }, [selectedRoomId, updater]);
+  }, [selectedRoomId, updater, memberOpen]);
 
 
   return (
