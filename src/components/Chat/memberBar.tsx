@@ -27,6 +27,7 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
   const [username, setUsername] = useState<string>('');
   const [room, setRoom] = useState<string>(roomId);
 
+  const [pulse, setPulse] = useState<boolean>(false);
   const [errText, setErrText] = useState("");
   const [okText, setOkText] = useState("");
 
@@ -53,7 +54,7 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
 
     setMembers(member);
 
-  }, [member])
+  }, [member, pulse])
 
 
   useEffect(() => {
@@ -102,9 +103,8 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
       }
 
     }
-
     activate();
-
+    setPulse(!pulse);
   };
 
   const handleRemoveUser = (name: string) => {
@@ -121,6 +121,7 @@ export default function MemberList({ isOpen, closeMember, roomId, member, activa
     }
 
     activate();
+    setPulse(!pulse);
 };
 
   function isRoomAdmin(username: string, roomData: RoomMember[]) {

@@ -236,7 +236,6 @@ export async function Addmember(roomId: string, Username: string) {
         return response.data;
     } catch (error) {
         console.error("Error during add member:", error);
-        throw error;
     }
 }
 
@@ -258,7 +257,6 @@ export async function Removemember(roomId: string, Username: string) {
         return response.data;
     } catch (error) {
         console.error("Error during remove member:", error);
-        throw error;
     }
 }
 
